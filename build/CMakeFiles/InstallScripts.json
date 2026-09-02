@@ -1,9 +1,0 @@
-{
-	"InstallScripts" : 
-	[
-		"/home/error_world/Documents/Code/Game Project/build/cmake_install.cmake",
-		"/home/error_world/Documents/Code/Game Project/build/App/cmake_install.cmake",
-		"/home/error_world/Documents/Code/Game Project/build/Core/cmake_install.cmake"
-	],
-	"Parallel" : false
-}

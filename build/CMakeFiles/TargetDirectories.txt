@@ -1,8 +1,0 @@
-/home/error_world/Documents/Code/Game Project/build/CMakeFiles/edit_cache.dir
-/home/error_world/Documents/Code/Game Project/build/CMakeFiles/rebuild_cache.dir
-/home/error_world/Documents/Code/Game Project/build/App/CMakeFiles/App.dir
-/home/error_world/Documents/Code/Game Project/build/App/CMakeFiles/edit_cache.dir
-/home/error_world/Documents/Code/Game Project/build/App/CMakeFiles/rebuild_cache.dir
-/home/error_world/Documents/Code/Game Project/build/Core/CMakeFiles/Core.dir
-/home/error_world/Documents/Code/Game Project/build/Core/CMakeFiles/edit_cache.dir
-/home/error_world/Documents/Code/Game Project/build/Core/CMakeFiles/rebuild_cache.dir

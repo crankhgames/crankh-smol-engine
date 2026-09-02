@@ -1,0 +1,2 @@
+/usr/bin/ar qc libCore.a CMakeFiles/Core.dir/src/Core/App.cpp.o CMakeFiles/Core.dir/src/Core/Window.cpp.o CMakeFiles/Core.dir/src/Core/Layer.cpp.o CMakeFiles/Core.dir/src/Input/Input.cpp.o CMakeFiles/Core.dir/src/Renderer/Renderer.cpp.o CMakeFiles/Core.dir/src/ECS/Scene.cpp.o
+/usr/bin/ranlib libCore.a

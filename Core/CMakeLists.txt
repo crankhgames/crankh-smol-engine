@@ -1,0 +1,33 @@
+add_library(Core)
+
+
+target_sources(Core
+PRIVATE
+    src/Core/App.cpp
+    src/Core/Window.cpp
+    src/Core/Layer.cpp
+    src/Input/Input.cpp
+    src/Renderer/Renderer.cpp
+    src/ECS/Scene.cpp
+
+PUBLIC
+    FILE_SET HEADERS
+    FILES
+        src/Core/App.h
+        src/Core/Window.h
+        src/Core/Layer.h
+        src/Random/Random.h
+        src/Math/Math.h
+        src/Input/Input.h
+        src/Renderer/Renderer.h
+        src/ECS/Components.h
+        src/ECS/Scene.h
+        src/ECS/Entity.h
+        src/Animation/Interpolation.h
+        src/Animation/Animation.h
+)
+
+target_include_directories(Core
+PUBLIC
+    src
+)

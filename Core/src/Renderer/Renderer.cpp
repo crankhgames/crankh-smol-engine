@@ -67,4 +67,10 @@ namespace Core::Renderer{
     void draw(SDL_Texture* texture, const SDL_Rect& srcRect, const SDL_Rect& destRect){
         SDL_RenderCopy(Application::Get().getWindow()->getRenderer(), texture, &srcRect, &destRect);
     }
+
+    void draw(SDL_Texture* texture, const SDL_Rect& srcRect, const SDL_Rect& destRect, bool flipX, bool flipY){
+        SDL_RenderCopyEx(Application::Get().getWindow()->getRenderer(), texture, &srcRect, &destRect, 0.0, NULL, 
+            static_cast<SDL_RendererFlip>((flipX ? SDL_RendererFlip::SDL_FLIP_HORIZONTAL : SDL_RendererFlip::SDL_FLIP_NONE) | (flipY ? SDL_RendererFlip::SDL_FLIP_VERTICAL : SDL_RendererFlip::SDL_FLIP_NONE))
+        );
+    }
 }

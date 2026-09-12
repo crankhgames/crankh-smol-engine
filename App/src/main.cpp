@@ -11,8 +11,8 @@ int main(){
 
         Core::WindowSpecification{
             "Video Game",
-            800,
-            600,
+            1920,
+            1080,
             false
         }
     };

@@ -32,7 +32,9 @@ namespace Core{
 
     void Application::run(){
         
-        Renderer::loadAllTextures("assets/sprites/");
+        Renderer::loadAllTextures("assets/sprites/idle/");
+        Renderer::loadAllTextures("assets/sprites/jump/");
+        Renderer::loadAllTextures("assets/sprites/run/");
 
         m_IsRunning = true;
 

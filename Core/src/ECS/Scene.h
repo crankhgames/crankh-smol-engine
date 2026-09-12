@@ -253,7 +253,7 @@ namespace Core::ECS
         }
 
         template <typename T>
-        constexpr bool hasComponent(Entity entity) const{
+        constexpr bool hasComponent(Entity entity) {
             return m_Registry.hasComponent<T>(entity);
         }
 

@@ -9,6 +9,7 @@ PRIVATE
     src/Input/Input.cpp
     src/Renderer/Renderer.cpp
     src/ECS/Scene.cpp
+    src/Physics/CollisionDetection.cpp
 
 PUBLIC
     FILE_SET HEADERS
@@ -25,6 +26,7 @@ PUBLIC
         src/ECS/Entity.h
         src/Animation/Interpolation.h
         src/Animation/Animation.h
+        src/Physics/CollisionDetection.h
 )
 
 target_include_directories(Core

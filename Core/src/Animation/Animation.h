@@ -2,6 +2,7 @@
 
 #include <unordered_map>
 #include <functional>
+#include <vector>
 #include <string>
 #include <string_view>
 
@@ -34,7 +35,7 @@ namespace Core::Animation {
         {};
 
         Animation(const std::unordered_map<int, std::function<void(Core::ECS::Entity)>>& frameActivators, int totalFrames, double duration, bool looping, Core::ECS::Entity entity):
-            m_FrameActivators{frameActivators}, m_TotalFrames{totalFrames}, m_Duration{duration}, m_DelayBtwFrames{duration / totalFrames}, m_Looping{looping}, m_Stopped{false}, m_Entity{entity}
+            m_FrameActivators{frameActivators},  m_TotalFrames{totalFrames}, m_Duration{duration}, m_DelayBtwFrames{duration / totalFrames}, m_Looping{looping}, m_Stopped{false}, m_Entity{entity}
         {};
 
         void reset(){
@@ -52,6 +53,7 @@ namespace Core::Animation {
         }
 
         void update(double ts){
+
 
             if (m_Stopped){
                 return;
@@ -92,14 +94,18 @@ namespace Core::Animation {
     class Animator{
     private:
         std::unordered_map<std::string, Animation> m_Animations{};
+        //std::unordered_map<std::string, std::vector<std::pair<std::function<bool()>, std::string>>> m_TransitionChecks{};
         std::string m_CurrentAnimation {};
+
 
     public:
         Animator():
             m_Animations{}, m_CurrentAnimation{}
         {};
 
-        Animator(const std::unordered_map<std::string, Animation>& animations, std::string_view currentAnimation):
+// ADD THIS TYPE
+//const std::unordered_map<std::string, std::vector<std::pair<std::function<bool()>, std::string>>>& transitionChecks,
+        Animator(const std::unordered_map<std::string, Animation>& animations,  std::string_view currentAnimation):
             m_Animations{animations}, m_CurrentAnimation{currentAnimation}
         {};
 
@@ -110,6 +116,13 @@ namespace Core::Animation {
         }
 
         void update(double ts){
+            
+            //for (auto transition : m_TransitionChecks[m_CurrentAnimation]){
+                //if (transition.first()){
+                    //switchAnimation(transition.second);
+                //}
+            //}
+
             m_Animations[m_CurrentAnimation].update(ts);
         }
 

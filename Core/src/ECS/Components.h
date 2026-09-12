@@ -3,6 +3,7 @@
 #include "Math/Math.h"
 #include "Renderer/Renderer.h"
 #include "Animation/Animation.h"
+#include "Physics/CollisionDetection.h"
 
 #include <bitset>
 #include <memory>
@@ -84,12 +85,15 @@ namespace Core::ECS{
 
             AnchorPoint m_AnchorPoint {};
 
+
+            bool m_FlipX {};
+
             SpriteComponent():
                 m_Texture{nullptr}, m_SourcePos{0, 0}, m_SourceSize{0,0}, m_AnchorPoint {AnchorX::left, AnchorY::top}
             {};
 
-            SpriteComponent(std::string_view textureName, AnchorPoint anchorPoint, Math::Vec2 sourcePos):
-                m_Texture{Renderer::getTexture(textureName)}, m_SourcePos{sourcePos}, m_AnchorPoint{anchorPoint}
+            SpriteComponent(std::string_view textureName, AnchorPoint anchorPoint, Math::Vec2 sourcePos, bool flipX=false):
+                m_Texture{Renderer::getTexture(textureName)}, m_SourcePos{sourcePos}, m_AnchorPoint{anchorPoint}, m_FlipX {flipX}
             {
                 int width{};
                 int height{};
@@ -97,8 +101,8 @@ namespace Core::ECS{
                 m_SourceSize.set(width, height);
             };
 
-            SpriteComponent(std::string_view textureName, AnchorPoint anchorPoint, Math::Vec2 sourcePos, Math::Vec2 sourceSize ):
-                m_Texture{Renderer::getTexture(textureName)}, m_SourcePos{sourcePos}, m_SourceSize{sourceSize}, m_AnchorPoint{anchorPoint}
+            SpriteComponent(std::string_view textureName, AnchorPoint anchorPoint, Math::Vec2 sourcePos, Math::Vec2 sourceSize, bool flipX=false):
+                m_Texture{Renderer::getTexture(textureName)}, m_SourcePos{sourcePos}, m_SourceSize{sourceSize}, m_AnchorPoint{anchorPoint}, m_FlipX {flipX}
             {};
             
             void loadNewTexture(std::string_view textureName){
@@ -159,6 +163,37 @@ namespace Core::ECS{
 
             INIT_TYPE;
         };
+
+        struct ActorColliderComponent {
+            Math::Vec2 m_Bounds {};
+            Math::Vec2 m_Offset {};
+            
+            ActorColliderComponent():
+                m_Bounds{}
+            {}
+
+            ActorColliderComponent(const Math::Vec2& bounds, const Math::Vec2& offset):
+                m_Bounds{bounds}, m_Offset{offset}
+            {}
+
+            INIT_TYPE;
+        };
+
+        struct SolidColliderComponent{
+            Math::Vec2 m_Bounds {};
+            Math::Vec2 m_Offset {};
+
+            SolidColliderComponent():
+                m_Bounds{}
+            {}
+
+            SolidColliderComponent(const Math::Vec2& bounds, const Math::Vec2& offset):
+                m_Bounds{bounds}, m_Offset{offset}
+            {}
+
+            INIT_TYPE;
+        };
+
     }
 
 }

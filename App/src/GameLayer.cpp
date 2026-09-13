@@ -24,8 +24,7 @@ namespace Variables {
 void GameLayer::onStart(){
     using namespace Core::ECS::Components;
 
-    gameScene.registerComponents<TransformComponent, TagComponent, SpriteComponent, CameraComponent, AnimatorComponent, RigidbodyComponent, ActorColliderComponent, SolidColliderComponent, VirusComponent>();
-
+    gameScene.registerComponents<TransformComponent, TagComponent, SpriteComponent, CameraComponent, AnimatorComponent, RigidbodyComponent, ActorColliderComponent, SolidColliderComponent, TilemapComponent, VirusComponent>();
     //Variables::player = &gameScene.createEntity();
     //Variables::player->addComponent<TransformComponent>(Core::Math::Vec2{0.0, 0.0}, Core::Math::Vec2{200.0, 200.0});
     //Variables::player->addComponent<SpriteComponent>("assets/sprites/mario.jpg");
@@ -160,38 +159,164 @@ void GameLayer::onStart(){
 
     );
 
-    Variables::playerEntity.addComponent<ActorColliderComponent>(Core::Math::Vec2{0.5, 0.6}, Core::Math::Vec2{-.3, -0.6});
+    Variables::playerEntity.addComponent<ActorColliderComponent>(Core::Math::Vec2{0.5, 0.5}, Core::Math::Vec2{-.3, -0.5});
 
+    Core::ECS::Entity platformTilemapEntity {gameScene.createEntity()};
+    platformTilemapEntity.addComponent<TransformComponent>(Core::Math::Vec2{-4.0, -2.0});
+    platformTilemapEntity.addComponent<TilemapComponent>("assets/sprites/tilemap/tileset.png", std::vector<Core::Renderer::Tile>{
+        {{240, 224}, {16, 16}, {0, 0}},
+        {{272, 224}, {16, 16}, {1, 0}},
+        {{272, 224}, {16, 16}, {2, 0}},
+        {{272, 224}, {16, 16}, {3, 0}},
+        {{272, 224}, {16, 16}, {4, 0}},
+        {{304, 224}, {16, 16}, {5, 0}},
+        {{48, 16}, {16, 16}, {9, 0}},
+        {{48, 16}, {16, 16}, {9, 0}},
+        {{48, 16}, {16, 16}, {14, 2}},
+        {{48, 16}, {16, 16}, {15, 2}},
+        {{48, 16}, {16, 16}, {16, 2}},
+        {{48, 16}, {16, 16}, {17, 2}},
+        {{48, 16}, {16, 16}, {18, 2}},
+        {{48, 16}, {16, 16}, {19, 2}},
+        {{48, 16}, {16, 16}, {12, 4}},
+        {{48, 16}, {16, 16}, {11, 5}},
+        {{16, 16}, {16, 16}, {6, 7}},
+        {{48, 16}, {16, 16}, {7, 7}},
+        {{48, 16}, {16, 16}, {8, 7}},
+        {{48, 16}, {16, 16}, {9, 7}},
+        {{48, 16}, {16, 16}, {10, 7}},
+        {{48, 16}, {16, 16}, {11, 7}},
+        {{48, 16}, {16, 16}, {12, 7}},
+        {{48, 16}, {16, 16}, {13, 7}},
+        {{48, 16}, {16, 16}, {14, 7}},
+        {{80, 16}, {16, 16}, {15, 7}},
+        {{16, 16}, {16, 16}, {0, 8}},
+        {{48, 16}, {16, 16}, {1, 8}},
+        {{48, 16}, {16, 16}, {2, 8}},
+        {{48, 16}, {16, 16}, {3, 8}},
+        {{48, 16}, {16, 16}, {4, 8}},
+        {{48, 16}, {16, 16}, {5, 8}},
+        {{48, 48}, {16, 16}, {6, 8}},
+        {{48, 48}, {16, 16}, {7, 8}},
+        {{48, 48}, {16, 16}, {8, 8}},
+        {{48, 48}, {16, 16}, {9, 8}},
+        {{48, 48}, {16, 16}, {10, 8}},
+        {{48, 48}, {16, 16}, {11, 8}},
+        {{48, 48}, {16, 16}, {12, 8}},
+        {{48, 48}, {16, 16}, {13, 8}},
+        {{48, 48}, {16, 16}, {14, 8}},
+        {{48, 48}, {16, 16}, {15, 8}},
+        {{48, 16}, {16, 16}, {16, 8}},
+        {{48, 16}, {16, 16}, {17, 8}},
+        {{48, 16}, {16, 16}, {18, 8}},
+        {{80, 16}, {16, 16}, {19, 8}},
+        {{16, 48}, {16, 16}, {0, 9}},
+        {{48, 48}, {16, 16}, {1, 9}},
+        {{48, 48}, {16, 16}, {2, 9}},
+        {{48, 48}, {16, 16}, {3, 9}},
+        {{48, 48}, {16, 16}, {4, 9}},
+        {{48, 48}, {16, 16}, {5, 9}},
+        {{48, 48}, {16, 16}, {6, 9}},
+        {{48, 48}, {16, 16}, {7, 9}},
+        {{48, 48}, {16, 16}, {8, 9}},
+        {{48, 48}, {16, 16}, {9, 9}},
+        {{48, 48}, {16, 16}, {10, 9}},
+        {{48, 48}, {16, 16}, {11, 9}},
+        {{48, 48}, {16, 16}, {12, 9}},
+        {{48, 48}, {16, 16}, {13, 9}},
+        {{48, 48}, {16, 16}, {14, 9}},
+        {{48, 48}, {16, 16}, {15, 9}},
+        {{48, 48}, {16, 16}, {16, 9}},
+        {{48, 48}, {16, 16}, {17, 9}},
+        {{48, 48}, {16, 16}, {18, 9}},
+        {{80, 48}, {16, 16}, {19, 9}},
+        {{80, 48}, {16, 16}, {19, 10}},
+        {{80, 160}, {16, 16}, {19, 11}},
+        {{64, 160}, {16, 16}, {18, 11}},
+        {{64, 176}, {18, 16}, {18, 12}},
+        {{16, 160}, {16, 16}, {0, 10}},
+        {{32, 160}, {16, 16}, {1, 10}},
+        {{32, 176}, {16, 16}, {1, 11}},
+        {{48, 48}, {16, 16}, {2, 10}},
+        {{48, 48}, {16, 16}, {3, 10}},
+        {{48, 48}, {16, 16}, {4, 10}},
+        {{48, 48}, {16, 16}, {5, 10}},
+        {{48, 48}, {16, 16}, {6, 10}},
+        {{48, 48}, {16, 16}, {7, 10}},
+        {{48, 48}, {16, 16}, {8, 10}},
+        {{48, 48}, {16, 16}, {9, 10}},
+        {{48, 48}, {16, 16}, {10, 10}},
+        {{48, 48}, {16, 16}, {11, 10}},
+        {{48, 48}, {16, 16}, {12, 10}},
+        {{48, 48}, {16, 16}, {13, 10}},
+        {{48, 48}, {16, 16}, {14, 10}},
+        {{48, 48}, {16, 16}, {15, 10}},
+        {{48, 48}, {16, 16}, {16, 10}},
+        {{48, 48}, {16, 16}, {17, 10}},
+        {{48, 48}, {16, 16}, {18, 10}},
+        {{48, 48}, {16, 16}, {3, 11}},
+        {{48, 48}, {16, 16}, {4, 11}},
+        {{48, 48}, {16, 16}, {5, 11}},
+        {{48, 48}, {16, 16}, {6, 11}},
+        {{48, 48}, {16, 16}, {7, 11}},
+        {{48, 48}, {16, 16}, {8, 11}},
+        {{48, 48}, {16, 16}, {9, 11}},
+        {{48, 48}, {16, 16}, {10, 11}},
+        {{48, 48}, {16, 16}, {11, 11}},
+        {{48, 48}, {16, 16}, {12, 11}},
+        {{48, 48}, {16, 16}, {13, 11}},
+        {{48, 48}, {16, 16}, {14, 11}},
+        {{48, 48}, {16, 16}, {15, 11}},
+        {{48, 48}, {16, 16}, {16, 11}},
+        {{48, 48}, {16, 16}, {17, 11}},
+        {{32, 160}, {16, 16}, {2, 11}},
+        {{48, 80}, {16, 16}, {3, 12}},
+        {{48, 80}, {16, 16}, {4, 12}},
+        {{48, 80}, {16, 16}, {5, 12}},
+        {{48, 80}, {16, 16}, {6, 12}},
+        {{48, 80}, {16, 16}, {7, 12}},
+        {{48, 80}, {16, 16}, {8, 12}},
+        {{48, 80}, {16, 16}, {9, 12}},
+        {{48, 80}, {16, 16}, {10, 12}},
+        {{48, 80}, {16, 16}, {11, 12}},
+        {{48, 80}, {16, 16}, {12, 12}},
+        {{48, 80}, {16, 16}, {13, 12}},
+        {{48, 80}, {16, 16}, {14, 12}},
+        {{48, 80}, {16, 16}, {15, 12}},
+        {{48, 80}, {16, 16}, {16, 12}},
+        {{48, 80}, {16, 16}, {17, 12}},
+        {{16, 80}, {16, 16}, {2, 12}},
+    }, 0.5, true);
     
-    Core::ECS::Entity platformEntity {gameScene.createEntity()};
-    platformEntity.addComponent<TransformComponent>(Core::Math::Vec2{-1.0, 1.5});
-    platformEntity.addComponent<SolidColliderComponent>(Core::Math::Vec2{5.0, 0.5}, Core::Math::Vec2{});
-
-    Core::ECS::Entity floorEntity {gameScene.createEntity()};
-    floorEntity.addComponent<TransformComponent>(Core::Math::Vec2{-4.0, 2.0});
-    floorEntity.addComponent<SolidColliderComponent>(Core::Math::Vec2{10.0, 1.0}, Core::Math::Vec2{});
-
-    Core::ECS::Entity platformEntity1 {gameScene.createEntity()};
-    platformEntity1.addComponent<TransformComponent>(Core::Math::Vec2{-4.0, -2.0});
-    platformEntity1.addComponent<SolidColliderComponent>(Core::Math::Vec2{3.0, 0.5}, Core::Math::Vec2{});
-
-    Core::ECS::Entity platformEntity2 {gameScene.createEntity()};
-    platformEntity2.addComponent<TransformComponent>(Core::Math::Vec2{3.0, -1.0});
-    platformEntity2.addComponent<SolidColliderComponent>(Core::Math::Vec2{3.0, 0.5}, Core::Math::Vec2{});
-
-    Core::ECS::Entity platformEntity3 {gameScene.createEntity()};
-    platformEntity3.addComponent<TransformComponent>(Core::Math::Vec2{2.0, -0.1});
-    platformEntity3.addComponent<SolidColliderComponent>(Core::Math::Vec2{0.5, 0.5}, Core::Math::Vec2{});
-
-    Core::ECS::Entity platformEntity4 {gameScene.createEntity()};
-    platformEntity4.addComponent<TransformComponent>(Core::Math::Vec2{1.5, 0.4});
-    platformEntity4.addComponent<SolidColliderComponent>(Core::Math::Vec2{0.5, 0.5}, Core::Math::Vec2{});
-
-    Core::ECS::Entity platformEntity5 {gameScene.createEntity()};
-    platformEntity5.addComponent<TransformComponent>(Core::Math::Vec2{0.5, -2.0});
-    platformEntity5.addComponent<SolidColliderComponent>(Core::Math::Vec2{0.5, 0.5}, Core::Math::Vec2{});
-
     std::cout << "Entity count: " << gameScene.getEntityCount() << '\n';
+
+
+
+    auto tilemaps {gameScene.getAllEntitiesWith<TilemapComponent>()};
+
+    for (Core::ECS::Entity tilemapEntity : tilemaps){
+        using namespace Core::ECS::Components;
+
+        TilemapComponent& tilemap {tilemapEntity.getComponent<TilemapComponent>()};
+
+        if (!tilemap.m_IsCollisionEnabled){
+            continue;
+        }
+
+        TransformComponent& tilemapTransform {tilemapEntity.getComponent<TransformComponent>()};
+
+        for (Core::Renderer::Tile& tile : tilemap.m_Tiles){
+            Core::Math::Vec2 tilePosition {tilemapTransform.m_Position + static_cast<Core::Math::Vec2>(tile.gridPosition) * tilemap.m_TileScale};
+            
+            Core::ECS::Entity tileEntity {gameScene.createEntity()};
+            tileEntity.addComponent<TransformComponent>(tilePosition);
+            tileEntity.addComponent<SolidColliderComponent>(Core::Math::Vec2{tilemap.m_TileScale, tilemap.m_TileScale}, Core::Math::Vec2{});
+            
+
+        }
+
+
+    }
 }
 
 bool hasLanded {false};
@@ -297,17 +422,22 @@ void GameLayer::onUpdate(double ts){
                 else{
                     actorTransform.m_Position -= Core::Math::Vec2{actorTopLeft.getX() - interX2, 0.0};
                 }
+                
+                if (actorEntity.hasComponent<RigidbodyComponent>()){
+                    actorEntity.getComponent<RigidbodyComponent>().m_Velocity.setX(0);
+                }
             }
             else{
                 if ((actorBottomRight.getY() - interY2) < 1e-6){
                     actorTransform.m_Position -= Core::Math::Vec2{0.0, actorBottomRight.getY() - interY1};
                     hasLanded = true;
-                    if (actorEntity.hasComponent<RigidbodyComponent>()){
-                        actorEntity.getComponent<RigidbodyComponent>().m_Velocity.setY(0);
-                    }
                 }
                 else{
                     actorTransform.m_Position -= Core::Math::Vec2{0.0, actorTopLeft.getY() - interY2};
+                }
+
+                if (actorEntity.hasComponent<RigidbodyComponent>()){
+                    actorEntity.getComponent<RigidbodyComponent>().m_Velocity.setY(0);
                 }
             }
 
@@ -387,47 +517,67 @@ void GameLayer::onRender(){
         }
     );
 
-    SDL_SetRenderDrawColor(GET_APPLICATION().getWindow()->getRenderer(), 0xFF, 0, 0, SDL_ALPHA_OPAQUE);
-
-    auto platformsVec {gameScene.getAllEntitiesWith<TransformComponent, SolidColliderComponent>()};
-    auto actorsVec {gameScene.getAllEntitiesWith<TransformComponent, ActorColliderComponent>()};
-    std::for_each(platformsVec.begin(), platformsVec.end(),
+    SDL_SetRenderDrawColor(GET_APPLICATION().getWindow()->getRenderer(), 0, 0xFF, 0, SDL_ALPHA_OPAQUE);
+    auto tilemapsVec {gameScene.getAllEntitiesWith<TilemapComponent>()};
+    std::for_each(tilemapsVec.begin(), tilemapsVec.end(), 
         [&](Core::ECS::Entity entity){
-            TransformComponent& platformTransform {entity.getComponent<TransformComponent>()};
-            SolidColliderComponent& platformCollider {entity.getComponent<SolidColliderComponent>()};
+            TransformComponent& transformTilemap {entity.getComponent<TransformComponent>()};
+            TilemapComponent& tilemap {entity.getComponent<TilemapComponent>()};
+            
+            for (Core::Renderer::Tile& tile : tilemap.m_Tiles){
+                Core::Math::Vec2 tilePosition {tilemap.m_TileScale * static_cast<Core::Math::Vec2>(tile.gridPosition) + transformTilemap.m_Position};
+                Core::Math::Vec2Int screenTilePosition {(tilePosition - cameraTransform.m_Position) * 100 * camera.m_Zoom + GET_APPLICATION().getWindow()->getWindowSize() / 2.0};
+                
+                SDL_Rect srcRect {tile.srcPosition.getX(), tile.srcPosition.getY(), tile.srcTileSize.getX(), tile.srcTileSize.getY()};
+                SDL_Rect destRect {screenTilePosition.getX(), screenTilePosition.getY(), tilemap.m_TileScale * 100, tilemap.m_TileScale * 100};
 
-            Core::Math::Vec2 platformScreenPosition {(platformTransform.m_Position + platformCollider.m_Offset - cameraTransform.m_Position) * 100 * camera.m_Zoom + GET_APPLICATION().getWindow()->getWindowSize() / 2.0};
-
-            SDL_Rect rect {
-                platformScreenPosition.getX(),
-                platformScreenPosition.getY(),
-                platformCollider.m_Bounds.getX() * 100 * camera.m_Zoom,
-                platformCollider.m_Bounds.getY() * 100 * camera.m_Zoom,
-            };
-
-            SDL_RenderFillRect(GET_APPLICATION().getWindow()->getRenderer(), &rect);
-
+                Core::Renderer::draw(tilemap.m_SpriteSheetTexture.get(), srcRect, destRect);
+            }
         }
     );
 
-    //std::for_each(actorsVec.begin(), actorsVec.end(),
-        //[&](Core::ECS::Entity entity){
-            //TransformComponent& actorTransform {entity.getComponent<TransformComponent>()};
-            //ActorColliderComponent& actorCollider {entity.getComponent<ActorColliderComponent>()};
 
-            //Core::Math::Vec2 actorScreenPosition {(actorTransform.m_Position + actorCollider.m_Offset - cameraTransform.m_Position) * 100 * camera.m_Zoom + GET_APPLICATION().getWindow()->getWindowSize() / 2.0};
+    SDL_SetRenderDrawColor(GET_APPLICATION().getWindow()->getRenderer(), 0xFF, 0, 0, SDL_ALPHA_OPAQUE);
+
+    //auto platformsVec {gameScene.getAllEntitiesWith<TransformComponent, SolidColliderComponent>()};
+    auto actorsVec {gameScene.getAllEntitiesWith<TransformComponent, ActorColliderComponent>()};
+    //std::for_each(platformsVec.begin(), platformsVec.end(),
+        //[&](Core::ECS::Entity entity){
+            //TransformComponent& platformTransform {entity.getComponent<TransformComponent>()};
+            //SolidColliderComponent& platformCollider {entity.getComponent<SolidColliderComponent>()};
+
+            //Core::Math::Vec2 platformScreenPosition {(platformTransform.m_Position + platformCollider.m_Offset - cameraTransform.m_Position) * 100 * camera.m_Zoom + GET_APPLICATION().getWindow()->getWindowSize() / 2.0};
 
             //SDL_Rect rect {
-                //actorScreenPosition.getX(),
-                //actorScreenPosition.getY(),
-                //actorCollider.m_Bounds.getX() * 100 * camera.m_Zoom,
-                //actorCollider.m_Bounds.getY() * 100 * camera.m_Zoom,
+                //platformScreenPosition.getX(),
+                //platformScreenPosition.getY(),
+                //platformCollider.m_Bounds.getX() * 100 * camera.m_Zoom,
+                //platformCollider.m_Bounds.getY() * 100 * camera.m_Zoom,
             //};
 
             //SDL_RenderDrawRect(GET_APPLICATION().getWindow()->getRenderer(), &rect);
 
         //}
     //);
+
+    std::for_each(actorsVec.begin(), actorsVec.end(),
+        [&](Core::ECS::Entity entity){
+            TransformComponent& actorTransform {entity.getComponent<TransformComponent>()};
+            ActorColliderComponent& actorCollider {entity.getComponent<ActorColliderComponent>()};
+
+            Core::Math::Vec2 actorScreenPosition {(actorTransform.m_Position + actorCollider.m_Offset - cameraTransform.m_Position) * 100 * camera.m_Zoom + GET_APPLICATION().getWindow()->getWindowSize() / 2.0};
+
+            SDL_Rect rect {
+                actorScreenPosition.getX(),
+                actorScreenPosition.getY(),
+                actorCollider.m_Bounds.getX() * 100 * camera.m_Zoom,
+                actorCollider.m_Bounds.getY() * 100 * camera.m_Zoom,
+            };
+
+            SDL_RenderDrawRect(GET_APPLICATION().getWindow()->getRenderer(), &rect);
+
+        }
+    );
 
 }
 

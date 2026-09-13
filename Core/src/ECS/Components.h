@@ -4,8 +4,10 @@
 #include "Renderer/Renderer.h"
 #include "Animation/Animation.h"
 #include "Physics/CollisionDetection.h"
+#include "Renderer/Tilemap.h"
 
 #include <bitset>
+#include <vector>
 #include <memory>
 #include <unordered_map>
 #include <functional>
@@ -13,7 +15,7 @@
 
 namespace Core::ECS{
 
-    using ComponentBitset = std::bitset<8>;
+    using ComponentBitset = std::bitset<32>;
 
 
     inline int retrieveNewComponentTypeId(){
@@ -189,6 +191,26 @@ namespace Core::ECS{
 
             SolidColliderComponent(const Math::Vec2& bounds, const Math::Vec2& offset):
                 m_Bounds{bounds}, m_Offset{offset}
+            {}
+
+            INIT_TYPE;
+        };
+
+        struct TilemapComponent {
+            std::shared_ptr<SDL_Texture> m_SpriteSheetTexture {};
+            std::vector<Renderer::Tile> m_Tiles {};
+
+            double m_TileScale {1.0};
+
+            bool m_IsCollisionEnabled {false};
+
+
+            TilemapComponent():
+                m_SpriteSheetTexture{}, m_Tiles {}, m_TileScale {1.0}, m_IsCollisionEnabled{false}
+            {}
+
+            TilemapComponent(std::string_view textureName, const std::vector<Renderer::Tile>& tiles, double tileScale=1.0, bool isCollisionEnabled=false):
+                m_SpriteSheetTexture{Renderer::getTexture(textureName)}, m_Tiles{tiles}, m_TileScale {tileScale}, m_IsCollisionEnabled{isCollisionEnabled}
             {}
 
             INIT_TYPE;

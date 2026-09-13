@@ -5,7 +5,7 @@
 namespace Core::ECS {
 
     using EntityId = int;
-    using ComponentBitset = std::bitset<8>;
+    using ComponentBitset = std::bitset<32>;
 
     class Scene;
     

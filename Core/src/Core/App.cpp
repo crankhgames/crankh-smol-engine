@@ -35,6 +35,7 @@ namespace Core{
         Renderer::loadAllTextures("assets/sprites/idle/");
         Renderer::loadAllTextures("assets/sprites/jump/");
         Renderer::loadAllTextures("assets/sprites/run/");
+        Renderer::loadAllTextures("assets/sprites/tilemap/");
 
         m_IsRunning = true;
 

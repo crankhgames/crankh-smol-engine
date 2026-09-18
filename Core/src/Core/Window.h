@@ -6,6 +6,7 @@
 #include "Math/Math.h"
 
 #include "SDL2/SDL.h"
+#include "SDL_Pointers.h"
 
 namespace Core
 {
@@ -20,8 +21,8 @@ namespace Core
         private:
             WindowSpecification m_Specification{};
             
-            SDL_Window* m_Window{};
-            SDL_Renderer* m_Renderer{};
+            WindowPtr m_Window{};
+            RendererPtr m_Renderer{};
 
         public:
             Window(const WindowSpecification& specification);
@@ -29,7 +30,8 @@ namespace Core
 
             void init();
 
-            SDL_Renderer* getRenderer() const {return m_Renderer;}
+            SDL_Window& getWindow() const {return *m_Window;}
+            SDL_Renderer& getRenderer() const {return *m_Renderer;}
 
             int getWidth() const {return m_Specification.width;}
             int getHeight() const {return m_Specification.height;}
@@ -37,6 +39,7 @@ namespace Core
             Math::Vec2 getWindowSize() const { 
                 return Math::Vec2 {static_cast<double>(m_Specification.width), static_cast<double>(m_Specification.height)};
             }
+
 
     };
 }

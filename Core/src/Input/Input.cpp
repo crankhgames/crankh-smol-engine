@@ -1,5 +1,6 @@
 #include "Input.h"
 
+
 namespace Core::Input
 {
     bool getKeyPressed(SDL_Scancode scancode){

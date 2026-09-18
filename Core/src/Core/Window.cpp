@@ -8,8 +8,6 @@ namespace Core
     {}
 
     Window::~Window(){
-        SDL_DestroyRenderer(m_Renderer);
-        SDL_DestroyWindow(m_Window);
     }
 
 
@@ -19,14 +17,14 @@ namespace Core
             fullscreenFlags = SDL_WINDOW_FULLSCREEN;
         }
 
-        m_Window = SDL_CreateWindow(
+        m_Window = WindowPtr {SDL_CreateWindow(
             m_Specification.title.c_str(),
             SDL_WINDOWPOS_UNDEFINED,
             SDL_WINDOWPOS_UNDEFINED,
             m_Specification.width,
             m_Specification.height,
             fullscreenFlags
-        );
+        )};
 
 
         if (!m_Window){
@@ -35,7 +33,7 @@ namespace Core
             return;
         }
 
-        m_Renderer = SDL_CreateRenderer(m_Window, -1, SDL_RENDERER_ACCELERATED);
+        m_Renderer = RendererPtr{ SDL_CreateRenderer(&getWindow(), -1, SDL_RENDERER_ACCELERATED) };
         
         if (!m_Renderer){
             //SDL_LogError(0, "Renderer not initialized properly...");

@@ -12,11 +12,11 @@ namespace Core{
     public: 
         virtual ~Layer() = default;
 
-        virtual void onEvent(const SDL_Event& event) {};
+        virtual bool onEvent(const SDL_Event& event) = 0;
 
-        virtual void onStart() {};
-        virtual void onUpdate(double ts) {};
-        virtual void onRender() {};
+        virtual void onStart() = 0;
+        virtual void onUpdate(double ts) = 0;
+        virtual void onRender() = 0;
     };
 
 }

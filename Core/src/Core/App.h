@@ -6,7 +6,9 @@
 #include <string>
 #include <memory>
 #include <vector>
+#include <queue>
 
+#include "SDL_Pointers.h"
 
 namespace Core{
 
@@ -19,7 +21,7 @@ namespace Core{
 
     private:
         ApplicationSpecification m_Specification;
-        std::shared_ptr<Window> m_Window;
+        std::unique_ptr<Window> m_Window;
 
         std::vector<std::unique_ptr<Layer>> m_LayerStack{};
 
@@ -39,7 +41,7 @@ namespace Core{
         void run();
 
         static Application& Get();
-        std::shared_ptr<Window> getWindow() const {return m_Window;}
+        Window& getWindow() const {return *m_Window;}
 
         friend class Layer;
 

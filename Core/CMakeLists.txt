@@ -28,6 +28,7 @@ PUBLIC
         src/Animation/Interpolation.h
         src/Animation/Animation.h
         src/Physics/CollisionDetection.h
+        src/SDL_Pointers.h
 )
 
 target_include_directories(Core

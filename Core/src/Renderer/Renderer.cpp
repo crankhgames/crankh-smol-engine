@@ -2,6 +2,7 @@
 
 #include "Core/App.h"
 
+
 #include <iostream>
 #include <filesystem>
 #include <unordered_map>
@@ -31,12 +32,12 @@ namespace Core::Renderer{
         }
     };
 
-    static std::unordered_map<std::string, std::shared_ptr<SDL_Texture>, StringHash, StringEqual> loadedTextures {};
+    static std::unordered_map<std::string, TexturePtr, StringHash, StringEqual> loadedTextures {};
 
 
-    std::shared_ptr<SDL_Texture> loadTexture(const char* filename){
-        std::shared_ptr<SDL_Texture> texture {
-            IMG_LoadTexture(Core::Application::Get().getWindow()->getRenderer(), filename), SDL_DestroyTexture
+    SDL_Texture* loadTexture(const char* filename){
+        TexturePtr texture {
+            IMG_LoadTexture(&Core::Application::Get().getWindow().getRenderer(), filename)
         };
 
         std::cout << "Loading texture from " << filename << '\n';
@@ -46,13 +47,14 @@ namespace Core::Renderer{
             return nullptr;
         }
         
-        loadedTextures.insert({filename, texture});
-        return texture;
+        std::string key {filename};
+        loadedTextures.insert({key, std::move(texture)});
+        return loadedTextures[key].get();
     }
 
-    std::shared_ptr<SDL_Texture> getTexture(std::string_view textureName){
+    SDL_Texture* getTexture(std::string_view textureName){
         auto it = loadedTextures.find(textureName);
-        return (it != loadedTextures.end() ? it->second : nullptr);
+        return (it != loadedTextures.end() ? it->second.get() : nullptr);
     }
 
 
@@ -65,11 +67,11 @@ namespace Core::Renderer{
 
 
     void draw(SDL_Texture* texture, const SDL_Rect& srcRect, const SDL_Rect& destRect){
-        SDL_RenderCopy(Application::Get().getWindow()->getRenderer(), texture, &srcRect, &destRect);
+        SDL_RenderCopy(&Application::Get().getWindow().getRenderer(), texture, &srcRect, &destRect);
     }
 
     void draw(SDL_Texture* texture, const SDL_Rect& srcRect, const SDL_Rect& destRect, bool flipX, bool flipY){
-        SDL_RenderCopyEx(Application::Get().getWindow()->getRenderer(), texture, &srcRect, &destRect, 0.0, NULL, 
+        SDL_RenderCopyEx(&Application::Get().getWindow().getRenderer(), texture, &srcRect, &destRect, 0.0, NULL, 
             static_cast<SDL_RendererFlip>((flipX ? SDL_RendererFlip::SDL_FLIP_HORIZONTAL : SDL_RendererFlip::SDL_FLIP_NONE) | (flipY ? SDL_RendererFlip::SDL_FLIP_VERTICAL : SDL_RendererFlip::SDL_FLIP_NONE))
         );
     }

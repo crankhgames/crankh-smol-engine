@@ -12,8 +12,6 @@
 #include <print>
 #include <functional>
 
-#include "Virus.h"
-
 
 namespace Variables {
     Core::ECS::Entity playerEntity {};
@@ -24,11 +22,7 @@ namespace Variables {
 void GameLayer::onStart(){
     using namespace Core::ECS::Components;
 
-    gameScene.registerComponents<TransformComponent, TagComponent, SpriteComponent, CameraComponent, AnimatorComponent, RigidbodyComponent, ActorColliderComponent, SolidColliderComponent, TilemapComponent, VirusComponent>();
-    //Variables::player = &gameScene.createEntity();
-    //Variables::player->addComponent<TransformComponent>(Core::Math::Vec2{0.0, 0.0}, Core::Math::Vec2{200.0, 200.0});
-    //Variables::player->addComponent<SpriteComponent>("assets/sprites/mario.jpg");
-
+    gameScene.registerComponents<TransformComponent, TagComponent, SpriteComponent, CameraComponent, AnimatorComponent, RigidbodyComponent, ActorColliderComponent, SolidColliderComponent, TilemapComponent>();
     
     Core::ECS::Entity cameraEntity {gameScene.createEntity()};
     cameraEntity.addComponent<CameraComponent>(Core::Math::Vec2{4.0, 3.0}, 1.0, true);
@@ -461,10 +455,6 @@ void GameLayer::onRender(){
     
 
 
-    SDL_SetRenderDrawColor(GET_APPLICATION().getWindow()->getRenderer(), 0xFF, 0xFF, 0xFF, 0xFF);
-
-    SDL_RenderClear(Core::Application::Get().getWindow()->getRenderer());
-
 
     using namespace Core::ECS::Components;
 
@@ -481,7 +471,7 @@ void GameLayer::onRender(){
             
             //std::cout << "Entity " << entity->getId() << " position: " << entityTransform.m_Position << '\n';
 
-            Core::Math::Vec2 destPosition {(entityTransform.m_Position - cameraTransform.m_Position) * 100 * camera.m_Zoom + GET_APPLICATION().getWindow()->getWindowSize() / 2.0};
+            Core::Math::Vec2 destPosition {(entityTransform.m_Position - cameraTransform.m_Position) * 100 * camera.m_Zoom + GET_APPLICATION().getWindow().getWindowSize() / 2.0};
 
             switch (entitySprite.m_AnchorPoint.anchorX){
             case AnchorX::left:
@@ -512,12 +502,12 @@ void GameLayer::onRender(){
             SDL_Rect entityDestRect {static_cast<int>(destPosition.getX()), static_cast<int>(destPosition.getY()), static_cast<int>(entityTransform.m_Scale.getX() * entitySprite.m_SourceSize.getX() * camera.m_Zoom / 10.0), static_cast<int>(entityTransform.m_Scale.getY() * entitySprite.m_SourceSize.getY() * camera.m_Zoom / 10.0)};
 
 
-            Core::Renderer::draw(entitySprite.m_Texture.get(), entitySrcRect, entityDestRect, entitySprite.m_FlipX, false);
+            Core::Renderer::draw(entitySprite.m_Texture, entitySrcRect, entityDestRect, entitySprite.m_FlipX, false);
 
         }
     );
 
-    SDL_SetRenderDrawColor(GET_APPLICATION().getWindow()->getRenderer(), 0, 0xFF, 0, SDL_ALPHA_OPAQUE);
+    SDL_SetRenderDrawColor(&GET_APPLICATION().getWindow().getRenderer(), 0, 0xFF, 0, SDL_ALPHA_OPAQUE);
     auto tilemapsVec {gameScene.getAllEntitiesWith<TilemapComponent>()};
     std::for_each(tilemapsVec.begin(), tilemapsVec.end(), 
         [&](Core::ECS::Entity entity){
@@ -526,18 +516,18 @@ void GameLayer::onRender(){
             
             for (Core::Renderer::Tile& tile : tilemap.m_Tiles){
                 Core::Math::Vec2 tilePosition {tilemap.m_TileScale * static_cast<Core::Math::Vec2>(tile.gridPosition) + transformTilemap.m_Position};
-                Core::Math::Vec2Int screenTilePosition {(tilePosition - cameraTransform.m_Position) * 100 * camera.m_Zoom + GET_APPLICATION().getWindow()->getWindowSize() / 2.0};
+                Core::Math::Vec2Int screenTilePosition {(tilePosition - cameraTransform.m_Position) * 100 * camera.m_Zoom + GET_APPLICATION().getWindow().getWindowSize() / 2.0};
                 
                 SDL_Rect srcRect {tile.srcPosition.getX(), tile.srcPosition.getY(), tile.srcTileSize.getX(), tile.srcTileSize.getY()};
                 SDL_Rect destRect {screenTilePosition.getX(), screenTilePosition.getY(), tilemap.m_TileScale * 100, tilemap.m_TileScale * 100};
 
-                Core::Renderer::draw(tilemap.m_SpriteSheetTexture.get(), srcRect, destRect);
+                Core::Renderer::draw(tilemap.m_SpriteSheetTexture, srcRect, destRect);
             }
         }
     );
 
 
-    SDL_SetRenderDrawColor(GET_APPLICATION().getWindow()->getRenderer(), 0xFF, 0, 0, SDL_ALPHA_OPAQUE);
+    SDL_SetRenderDrawColor(&GET_APPLICATION().getWindow().getRenderer(), 0xFF, 0, 0, SDL_ALPHA_OPAQUE);
 
     //auto platformsVec {gameScene.getAllEntitiesWith<TransformComponent, SolidColliderComponent>()};
     auto actorsVec {gameScene.getAllEntitiesWith<TransformComponent, ActorColliderComponent>()};
@@ -565,7 +555,7 @@ void GameLayer::onRender(){
             TransformComponent& actorTransform {entity.getComponent<TransformComponent>()};
             ActorColliderComponent& actorCollider {entity.getComponent<ActorColliderComponent>()};
 
-            Core::Math::Vec2 actorScreenPosition {(actorTransform.m_Position + actorCollider.m_Offset - cameraTransform.m_Position) * 100 * camera.m_Zoom + GET_APPLICATION().getWindow()->getWindowSize() / 2.0};
+            Core::Math::Vec2 actorScreenPosition {(actorTransform.m_Position + actorCollider.m_Offset - cameraTransform.m_Position) * 100 * camera.m_Zoom + GET_APPLICATION().getWindow().getWindowSize() / 2.0};
 
             SDL_Rect rect {
                 actorScreenPosition.getX(),
@@ -574,24 +564,27 @@ void GameLayer::onRender(){
                 actorCollider.m_Bounds.getY() * 100 * camera.m_Zoom,
             };
 
-            SDL_RenderDrawRect(GET_APPLICATION().getWindow()->getRenderer(), &rect);
+            SDL_RenderDrawRect(&GET_APPLICATION().getWindow().getRenderer(), &rect);
 
         }
     );
 
 }
 
-void GameLayer::onEvent(const SDL_Event& event){
+bool GameLayer::onEvent(const SDL_Event& event){
     switch (event.type){
     case SDL_MOUSEBUTTONDOWN:
         onMouseClick(event);
-        break;
+        return true;
     case SDL_KEYDOWN:
         onKeyboardPress(event);
-        break;
+        return true;
     case SDL_KEYUP:
         onKeyboardPress(event);
+        return true;
     }
+
+    return false;
 }
 
 void GameLayer::onMouseClick(const SDL_Event& event){
@@ -605,7 +598,6 @@ void GameLayer::onMouseClick(const SDL_Event& event){
 
 
 }
-
 
 void GameLayer::onKeyboardPress(const SDL_Event& event){
     Core::ECS::Components::TransformComponent& playerTransform {Variables::playerEntity.getComponent<Core::ECS::Components::TransformComponent>()};

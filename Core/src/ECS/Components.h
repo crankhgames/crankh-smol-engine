@@ -6,6 +6,8 @@
 #include "Physics/CollisionDetection.h"
 #include "Renderer/Tilemap.h"
 
+#include "SDL_Pointers.h"
+
 #include <bitset>
 #include <vector>
 #include <memory>
@@ -81,7 +83,7 @@ namespace Core::ECS{
         };
 
         struct SpriteComponent {
-            std::shared_ptr<SDL_Texture> m_Texture{};
+            SDL_Texture* m_Texture{};
             Math::Vec2 m_SourcePos{};
             Math::Vec2 m_SourceSize{};
 
@@ -99,7 +101,7 @@ namespace Core::ECS{
             {
                 int width{};
                 int height{};
-                SDL_QueryTexture(m_Texture.get(), NULL, NULL, &width, &height);
+                SDL_QueryTexture(m_Texture, NULL, NULL, &width, &height);
                 m_SourceSize.set(width, height);
             };
 
@@ -197,7 +199,7 @@ namespace Core::ECS{
         };
 
         struct TilemapComponent {
-            std::shared_ptr<SDL_Texture> m_SpriteSheetTexture {};
+            SDL_Texture* m_SpriteSheetTexture {};
             std::vector<Renderer::Tile> m_Tiles {};
 
             double m_TileScale {1.0};

@@ -2,6 +2,7 @@
 #include <print>
 
 #include "GameLayer.h"
+#include "EditorLayer.h"
 
 
 int main(){
@@ -19,6 +20,8 @@ int main(){
 
     Core::Application application {applicationSpecification};
     application.pushLayer<GameLayer>();
+    application.pushLayer<EditorLayer>();
     application.run();
+
 
 }

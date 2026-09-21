@@ -17,7 +17,7 @@ namespace Core{
         s_Application = this;
 
         SDL_Init(SDL_INIT_EVERYTHING);
-        //TTF_Init();
+        TTF_Init();
 
         m_Window = std::make_unique<Window>(specification.windowSpecification);
         m_Window->init();
@@ -25,11 +25,12 @@ namespace Core{
 
     Application::~Application(){
         s_Application = nullptr;
-        //TTF_Quit();
+        TTF_Quit();
         SDL_Quit();
     }
 
 
+    double timer {};
     void Application::run(){
         
         Renderer::loadAllTextures("assets/sprites/idle/");
@@ -51,6 +52,8 @@ namespace Core{
             Uint64 currentTicks {SDL_GetTicks64()};
 
             double timestep {SDL_clamp(deltaTicks / 1000.0, 0.000001, 0.1)};
+            timer += timestep;
+            std::println("Timer: {}", timer);
 
             SDL_Event e{};
             

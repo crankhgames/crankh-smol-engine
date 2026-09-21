@@ -11,6 +11,8 @@ PRIVATE
     src/Renderer/Renderer.cpp
     src/ECS/Scene.cpp
     src/Physics/CollisionDetection.cpp
+    src/UI/Text.cpp
+    src/UI/UIContainer.cpp
 
 PUBLIC
     FILE_SET HEADERS
@@ -29,6 +31,9 @@ PUBLIC
         src/Animation/Animation.h
         src/Physics/CollisionDetection.h
         src/SDL_Pointers.h
+        src/UI/Text.h
+        src/UI/UIContainer.h
+        src/UI/UIElement.h
 )
 
 target_include_directories(Core

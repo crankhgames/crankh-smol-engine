@@ -15,6 +15,7 @@ namespace Core::Renderer{
     void loadAllTextures(std::string_view folderName);
 
 
+    void draw(SDL_Texture* texture, const SDL_Rect& dest);
     void draw(SDL_Texture* texture, const SDL_Rect& src, const SDL_Rect& dest);
     void draw(SDL_Texture* texture, const SDL_Rect& src, const SDL_Rect& dest, bool flipX, bool flipY);
 

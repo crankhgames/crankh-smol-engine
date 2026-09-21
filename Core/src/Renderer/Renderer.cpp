@@ -65,6 +65,9 @@ namespace Core::Renderer{
         }
     }
 
+    void draw(SDL_Texture* texture, const SDL_Rect& destRect){
+        SDL_RenderCopy(&Application::Get().getWindow().getRenderer(), texture, NULL, &destRect);
+    }
 
     void draw(SDL_Texture* texture, const SDL_Rect& srcRect, const SDL_Rect& destRect){
         SDL_RenderCopy(&Application::Get().getWindow().getRenderer(), texture, &srcRect, &destRect);

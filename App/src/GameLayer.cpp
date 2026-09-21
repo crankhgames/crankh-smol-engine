@@ -323,7 +323,6 @@ bool isOverlapping(Core::Math::Vec2 point, Core::Math::Vec2 topLeft, Core::Math:
     return (topLeft.getX() < point.getX() && point.getX() < bottomRight.getX()) && (topLeft.getY() < point.getY() && point.getY() < bottomRight.getY());
 }
 
-
 void GameLayer::onUpdate(double ts){
     
 

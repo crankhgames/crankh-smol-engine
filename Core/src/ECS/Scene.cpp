@@ -62,7 +62,7 @@ namespace Core::ECS{
         m_EntitiesInfo[m_CurrentEntityCount] = {entity, ComponentBitset()};
         m_EntityIdToArrayIndex.insert({entity.getId(), m_CurrentEntityCount});
         ++m_CurrentEntityCount;
-        std::println("Entity Count: {}", m_CurrentEntityCount);
+        //std::println("Entity Count: {}", m_CurrentEntityCount);
     }
 
     Entity& EntityRegistry::getEntity(EntityId entityId) {

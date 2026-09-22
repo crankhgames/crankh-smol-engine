@@ -8,21 +8,21 @@
 
 namespace Core::UI {
     
-    class UIElement {
+    class UiElement {
     protected:
         Math::Vec2Int m_Position {};
         Math::Vec2Int m_Scale {};
 
     public:
-        UIElement():
+        UiElement():
             m_Position{}, m_Scale{}
         {}
 
-        UIElement(Math::Vec2Int position, Math::Vec2Int scale):
+        UiElement(Math::Vec2Int position, Math::Vec2Int scale):
             m_Position{position}, m_Scale{scale}
         {}
 
-        ~UIElement(){};
+        ~UiElement(){};
 
 
         Math::Vec2Int getPosition() const {return m_Position;}

@@ -29,8 +29,6 @@ namespace Core{
         SDL_Quit();
     }
 
-
-    double timer {};
     void Application::run(){
         
         Renderer::loadAllTextures("assets/sprites/idle/");
@@ -52,8 +50,6 @@ namespace Core{
             Uint64 currentTicks {SDL_GetTicks64()};
 
             double timestep {SDL_clamp(deltaTicks / 1000.0, 0.000001, 0.1)};
-            timer += timestep;
-            std::println("Timer: {}", timer);
 
             SDL_Event e{};
             

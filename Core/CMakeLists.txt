@@ -14,6 +14,7 @@ PRIVATE
     src/UI/Text.cpp
     src/UI/UiContainer.cpp
     src/UI/UiManager.cpp
+    src/UI/Button.cpp
 
 PUBLIC
     FILE_SET HEADERS
@@ -36,6 +37,7 @@ PUBLIC
         src/UI/UiContainer.h
         src/UI/UiElement.h
         src/UI/UiManager.h
+        src/UI/Button.h
 )
 
 target_include_directories(Core

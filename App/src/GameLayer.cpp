@@ -7,6 +7,7 @@
 #include "ECS/Scene.h"
 #include "Animation/Interpolation.h"
 #include "Animation/Animation.h"
+#include "Camera/Camera.h"
 
 #include <iostream>
 #include <print>
@@ -301,7 +302,7 @@ void GameLayer::onStart(){
 
         for (Core::Renderer::Tile& tile : tilemap.m_Tiles){
             Core::Math::Vec2 tilePosition {tilemapTransform.m_Position + static_cast<Core::Math::Vec2>(tile.gridPosition) * tilemap.m_TileScale};
-            
+
             Core::ECS::Entity tileEntity {gameScene.createEntity()};
             tileEntity.addComponent<TransformComponent>(tilePosition);
             tileEntity.addComponent<SolidColliderComponent>(Core::Math::Vec2{tilemap.m_TileScale, tilemap.m_TileScale}, Core::Math::Vec2{});
@@ -458,7 +459,6 @@ void GameLayer::onRender(){
     using namespace Core::ECS::Components;
 
     Core::ECS::Entity mainActiveCameraEntity {gameScene.getMainCameraEntity()};
-    TransformComponent& cameraTransform {mainActiveCameraEntity.getComponent<TransformComponent>()};
     CameraComponent& camera {mainActiveCameraEntity.getComponent<CameraComponent>()};
 
     auto vec {gameScene.getAllEntitiesWith<TransformComponent, SpriteComponent>()};
@@ -470,7 +470,7 @@ void GameLayer::onRender(){
             
             //std::cout << "Entity " << entity->getId() << " position: " << entityTransform.m_Position << '\n';
 
-            Core::Math::Vec2 destPosition {(entityTransform.m_Position - cameraTransform.m_Position) * 100 * camera.m_Zoom + GET_APPLICATION().getWindow().getWindowSize() / 2.0};
+            Core::Math::Vec2 destPosition {Core::Camera::worldToScreen(mainActiveCameraEntity, entityTransform.m_Position)};
 
             switch (entitySprite.m_AnchorPoint.anchorX){
             case AnchorX::left:
@@ -515,56 +515,13 @@ void GameLayer::onRender(){
             
             for (Core::Renderer::Tile& tile : tilemap.m_Tiles){
                 Core::Math::Vec2 tilePosition {tilemap.m_TileScale * static_cast<Core::Math::Vec2>(tile.gridPosition) + transformTilemap.m_Position};
-                Core::Math::Vec2Int screenTilePosition {(tilePosition - cameraTransform.m_Position) * 100 * camera.m_Zoom + GET_APPLICATION().getWindow().getWindowSize() / 2.0};
+                Core::Math::Vec2Int screenTilePosition {Core::Camera::worldToScreen(mainActiveCameraEntity, tilePosition)};
                 
                 SDL_Rect srcRect {tile.srcPosition.getX(), tile.srcPosition.getY(), tile.srcTileSize.getX(), tile.srcTileSize.getY()};
-                SDL_Rect destRect {screenTilePosition.getX(), screenTilePosition.getY(), tilemap.m_TileScale * 100, tilemap.m_TileScale * 100};
+                SDL_Rect destRect {screenTilePosition.getX(), screenTilePosition.getY(), static_cast<int>(tilemap.m_TileScale * 100), static_cast<int>(tilemap.m_TileScale * 100)};
 
                 Core::Renderer::draw(tilemap.m_SpriteSheetTexture, srcRect, destRect);
             }
-        }
-    );
-
-
-    SDL_SetRenderDrawColor(&GET_APPLICATION().getWindow().getRenderer(), 0xFF, 0, 0, SDL_ALPHA_OPAQUE);
-
-    //auto platformsVec {gameScene.getAllEntitiesWith<TransformComponent, SolidColliderComponent>()};
-    auto actorsVec {gameScene.getAllEntitiesWith<TransformComponent, ActorColliderComponent>()};
-    //std::for_each(platformsVec.begin(), platformsVec.end(),
-        //[&](Core::ECS::Entity entity){
-            //TransformComponent& platformTransform {entity.getComponent<TransformComponent>()};
-            //SolidColliderComponent& platformCollider {entity.getComponent<SolidColliderComponent>()};
-
-            //Core::Math::Vec2 platformScreenPosition {(platformTransform.m_Position + platformCollider.m_Offset - cameraTransform.m_Position) * 100 * camera.m_Zoom + GET_APPLICATION().getWindow()->getWindowSize() / 2.0};
-
-            //SDL_Rect rect {
-                //platformScreenPosition.getX(),
-                //platformScreenPosition.getY(),
-                //platformCollider.m_Bounds.getX() * 100 * camera.m_Zoom,
-                //platformCollider.m_Bounds.getY() * 100 * camera.m_Zoom,
-            //};
-
-            //SDL_RenderDrawRect(GET_APPLICATION().getWindow()->getRenderer(), &rect);
-
-        //}
-    //);
-
-    std::for_each(actorsVec.begin(), actorsVec.end(),
-        [&](Core::ECS::Entity entity){
-            TransformComponent& actorTransform {entity.getComponent<TransformComponent>()};
-            ActorColliderComponent& actorCollider {entity.getComponent<ActorColliderComponent>()};
-
-            Core::Math::Vec2 actorScreenPosition {(actorTransform.m_Position + actorCollider.m_Offset - cameraTransform.m_Position) * 100 * camera.m_Zoom + GET_APPLICATION().getWindow().getWindowSize() / 2.0};
-
-            SDL_Rect rect {
-                actorScreenPosition.getX(),
-                actorScreenPosition.getY(),
-                actorCollider.m_Bounds.getX() * 100 * camera.m_Zoom,
-                actorCollider.m_Bounds.getY() * 100 * camera.m_Zoom,
-            };
-
-            SDL_RenderDrawRect(&GET_APPLICATION().getWindow().getRenderer(), &rect);
-
         }
     );
 

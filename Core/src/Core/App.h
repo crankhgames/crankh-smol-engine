@@ -37,6 +37,17 @@ namespace Core{
         void pushLayer(){
             m_LayerStack.push_back(std::make_unique<TLayer>());
         }
+
+        template<typename T>
+        T* getLayer(){
+            for (auto it {m_LayerStack.begin()}; it != m_LayerStack.end(); ++it){
+                if (dynamic_cast<T*>(it->get())){
+                    return dynamic_cast<T*>(it->get());
+                }
+            }
+
+            return nullptr;
+        }
         
         void run();
 

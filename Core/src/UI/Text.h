@@ -20,8 +20,8 @@ namespace Core::UI{
         TexturePtr m_FontTexture {};
 
     public:
-        Text(Math::Vec2Int position, Math::Vec2Int scale, std::string_view content, int ptSize, const char* filename, SDL_Color color) : 
-            UiElement{position, scale},  m_Font {TTF_OpenFont(filename, ptSize)}, m_Color{color}, m_Content{content}
+        Text(Math::Vec2Int position, Math::Vec2Int scale, std::string_view content, int ptSize, std::string_view filename, SDL_Color color) : 
+            UiElement{position, scale},  m_Font {TTF_OpenFont(filename.data(), ptSize)}, m_Color{color}, m_Content{content}
         {
             SurfacePtr textSurface {
                 TTF_RenderText_Solid(m_Font.get(), m_Content.c_str(), m_Color)
@@ -29,8 +29,8 @@ namespace Core::UI{
             m_FontTexture.reset({SDL_CreateTextureFromSurface(&GET_APPLICATION().getWindow().getRenderer(), textSurface.get())});
         };
 
-        Text(std::string_view content, int ptSize, const char* filename):
-            Text{Math::Vec2Int{}, Math::Vec2Int{}, content, ptSize, filename, SDL_Color{0x000000}}
+        Text(std::string_view content, int ptSize, std::string_view filename, SDL_Color color):
+            Text{Math::Vec2Int{}, Math::Vec2Int{}, content, ptSize, filename, color}
         {
             int textureWidth {};
             int textureHeight {};
@@ -53,5 +53,7 @@ namespace Core::UI{
             m_Color.b = b;
             m_Color.a = a;
         }
+
+        void setContent(std::string_view newContent);
     };
 }

@@ -1,6 +1,7 @@
 #include "Scene.h"
 #include "Random/Random.h"
 #include "Math/Math.h"
+#include "Core/App.h"
 
 #include <limits>
 #include <iostream>

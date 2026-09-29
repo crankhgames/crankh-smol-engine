@@ -40,6 +40,10 @@ namespace Core
                 return Math::Vec2 {static_cast<double>(m_Specification.width), static_cast<double>(m_Specification.height)};
             }
 
+            Math::Vec2Int getWindowSizeInt() const { 
+                return Math::Vec2Int {m_Specification.width, m_Specification.height};
+            }
+
 
     };
 }

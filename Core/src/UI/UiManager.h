@@ -9,24 +9,20 @@
 namespace Core::UI
 {
 
-    namespace {
-        std::unique_ptr<UiContainer> selectedContainer {};
-    }
-
     std::unique_ptr<UiContainer> createContainer(bool isVertical, int gapSize);
 
+    struct UiAnchorPoint{
+        UiAnchorHorizontal anchorX{};
+        UiAnchorVertical anchorY{};
+    };
+
     template <typename T>
-    void attachUiElementToContainer(UiContainer* container, std::unique_ptr<T> uiElement){
-        container->add(std::move(uiElement));
+    void attachUiElement(UiElement* parentElement, UiAnchorPoint anchorPoint, std::unique_ptr<T> uiElement){
+        parentElement->add(std::move(uiElement), anchorPoint.anchorX, anchorPoint.anchorY);
     }
     template <typename T, typename... Args>
-    void attachUiElementToContainer(UiContainer* container, Args&&... args){
-        container->add(std::make_unique<T>(std::forward<Args>(args)...));
+    void attachUiElement(UiElement* parentElement, UiAnchorPoint anchorPoint, Args&&... args){
+        parentElement->add(std::make_unique<T>(std::forward<Args>(args)...), anchorPoint.anchorX, anchorPoint.anchorY);
     }
-
-    static void selectContainer(UiContainer* uiContainer){
-        selectedContainer.reset(uiContainer);
-    }
-
 
 }

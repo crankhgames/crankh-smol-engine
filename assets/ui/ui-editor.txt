@@ -1,0 +1,16 @@
+<container gap=20>
+    <text content="Entity Info:" size=30> </text>
+    <text content="ID: " size=15> </text>
+    <text content="Position: " size=15> </text>
+    <text content="Scale: " size=15> </text>
+
+    <button scaleX=150 scaleY=35 bgColor=FF00FFFF>
+        <text content="Btn 1" size=20 color=FFFF0000> </text>
+    </button>
+    <button scaleX=150 scaleY=35 bgColor=FF00FFFF>
+        <text content="Btn 2" size=20 color=FFFF0000> </text>
+    </button>
+    <button scaleX=150 scaleY=35 bgColor=FF00FFFF>
+        <text content="Btn 3" size=20 color=FFFF0000> </text>
+    </button>
+</container>

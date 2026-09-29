@@ -9,6 +9,7 @@ namespace Core::Input {
     bool getKeyPressed(SDL_Scancode scancode);
     
     Math::Vec2 getMousePosition();
+    Math::Vec2 getUVMousePosition();
 
     bool getMousePressed(int mouseButton);
 }

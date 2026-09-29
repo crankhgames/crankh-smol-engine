@@ -124,6 +124,7 @@ namespace Core::ECS{
 
             bool m_IsMainCamera{false};
 
+
             CameraComponent():
                 m_AspectRatio{16.0, 9.0}, m_Zoom{1.0}, m_IsMainCamera{false}
             {}
@@ -135,7 +136,7 @@ namespace Core::ECS{
             CameraComponent(const CameraComponent& other):
                 m_AspectRatio{other.m_AspectRatio}, m_Zoom{other.m_Zoom}, m_IsMainCamera{false}
             {}
-            
+
             INIT_TYPE;
         };
 

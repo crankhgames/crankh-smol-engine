@@ -20,5 +20,7 @@ namespace Core::UI {
         };
 
         SDL_RenderFillRect(&GET_APPLICATION().getWindow().getRenderer(), &destRect);
+
+        UiElement::render();
     }
 }

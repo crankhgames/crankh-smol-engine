@@ -12,9 +12,12 @@ PRIVATE
     src/ECS/Scene.cpp
     src/Physics/CollisionDetection.cpp
     src/UI/Text.cpp
+    src/UI/UiElement.cpp
     src/UI/UiContainer.cpp
     src/UI/UiManager.cpp
     src/UI/Button.cpp
+    src/Camera/Camera.cpp
+    src/UI/UiParser.cpp
 
 PUBLIC
     FILE_SET HEADERS
@@ -38,6 +41,8 @@ PUBLIC
         src/UI/UiElement.h
         src/UI/UiManager.h
         src/UI/Button.h
+        src/Camera/Camera.h
+        src/UI/UiParser.h
 )
 
 target_include_directories(Core

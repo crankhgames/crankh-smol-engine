@@ -18,4 +18,6 @@ public:
     void onUpdate(double ts) override;
     void onRender() override;
 
+    Core::ECS::Scene& getScene() {return gameScene;}
+
 };

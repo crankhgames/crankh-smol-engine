@@ -22,13 +22,16 @@ namespace Core::UI {
     };
 
     //struct UiStylingOptions {
-        //SDL_Color color{0x000000FF};
-        //SDL_Color backgroundColor{0xFFFFFFFF};
+        //SDL_Color color{0, 0, 0, 255};
+        //SDL_Color backgroundColor{0, 0, 0, 0};
 
         //double marginLeft {};
         //double marginRight {};
         //double marginTop {};
         //double marginBottom {};
+
+        //TexturePtr imageTexture {};
+        //FontPtr font {};
     //};
     
     class UiElement {
@@ -40,6 +43,7 @@ namespace Core::UI {
 
         std::vector<std::unique_ptr<UiElement>> m_Children {};
 
+        bool dragging{false};
 
     public:
         UiElement():
@@ -65,23 +69,9 @@ namespace Core::UI {
         }
 
         virtual bool onUserClick(const SDL_Event& event) { return false; }
+        virtual bool onUserDrag(const SDL_Event& event) { return false; }
 
-        virtual bool onEvent(const SDL_Event& event) {
-
-            bool executedEvent {false};
-
-            switch (event.type){
-            case SDL_MOUSEBUTTONDOWN:
-                executedEvent |= onUserClick(event);
-                break;
-            }
-
-            for (auto it = m_Children.begin(); it != m_Children.end(); it++){
-                executedEvent |= (*it)->onEvent(event);
-            }
-
-            return executedEvent;
-        }
+        virtual bool onEvent(const SDL_Event& event);
 
 
         virtual void render();

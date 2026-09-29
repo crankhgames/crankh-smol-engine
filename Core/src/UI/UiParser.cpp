@@ -2,9 +2,11 @@
 
 #include "Text.h"
 #include "Button.h"
+#include "Image.h"
 #include "UiContainer.h"
 
 #include <fstream>
+#include <optional>
 #include <print>
 #include <unordered_map>
 #include <bits/stdc++.h>
@@ -59,7 +61,7 @@ namespace Core::UI::UiParser {
                 content = properties["content"].substr(1, properties["content"].size()-2);
             }
             if (properties.find("font") != properties.end()){
-                font = properties["font"];
+                font = properties["font"].substr(1, properties["font"].size()-2);
             }
             if (properties.find("size") != properties.end()){
                 pointSize = std::stoi(properties["size"]);
@@ -119,6 +121,7 @@ namespace Core::UI::UiParser {
         else if (tagName == "container"){
             bool isVertical {true};
             int gapSize {0};
+            bool isDraggable {false};
 
             if (properties.find("gap") != properties.end()){
                 gapSize = std::stoi(properties["gap"]);
@@ -126,8 +129,38 @@ namespace Core::UI::UiParser {
             if (properties.find("vertical") != properties.end()){
                 isVertical = properties["vertical"] == "true";
             }
+            if (properties.find("draggable") != properties.end()){
+                isDraggable = properties["draggable"] == "true";
+            }
 
-            return std::make_unique<UiContainer>(isVertical, gapSize);
+            return std::make_unique<UiContainer>(isVertical, gapSize, isDraggable);
+        }
+        else if (tagName == "image"){
+            std::string textureFilename {"assets/sprites/horse-image.jpg"};
+            std::optional<int> scaleX{std::nullopt};
+            std::optional<int> scaleY{std::nullopt};
+            double scale {1.0};
+
+            if (properties.find("scaleX") != properties.end()) {
+                scaleX = std::stoi(properties["scaleX"]);
+            }
+            if (properties.find("scaleY") != properties.end()) {
+                scaleY = std::stoi(properties["scaleY"]);
+            }
+            if (properties.find("scale") != properties.end()) {
+                scale = std::stod(properties["scale"]);
+            }
+            if (properties.find("content") != properties.end()){
+                textureFilename = properties["content"].substr(1, properties["content"].size()-2);
+            }
+
+            if (scaleX || scaleY){
+                return std::make_unique<Image>(Math::Vec2Int{scaleX.value_or(500), scaleY.value_or(500)}, textureFilename);
+            }
+            else{
+                return std::make_unique<Image>(scale, textureFilename);
+            }
+
         }
 
         return std::make_unique<UiElement>();
@@ -137,16 +170,14 @@ namespace Core::UI::UiParser {
         std::unique_ptr<UiElement> rootElement {createUiElementFromTag(*start)};
         std::println("Tag {}", *start);
 
-        int currentTagCount{1};
 
         auto it {start+1};
-        while (it != end && currentTagCount > 0){
+        while (it != end){
             if (it->starts_with("</")){
-                --currentTagCount;
                 ++it;
+                break;
             }
             else{
-                ++currentTagCount;
                 auto element {createUiTreeRecursively(it, end)};
                 rootElement->add(std::move(element.first));
                 it = element.second;

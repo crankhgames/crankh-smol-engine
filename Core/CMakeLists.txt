@@ -12,6 +12,7 @@ PRIVATE
     src/ECS/Scene.cpp
     src/Physics/CollisionDetection.cpp
     src/UI/Text.cpp
+    src/UI/Image.cpp
     src/UI/UiElement.cpp
     src/UI/UiContainer.cpp
     src/UI/UiManager.cpp
@@ -37,6 +38,7 @@ PUBLIC
         src/Physics/CollisionDetection.h
         src/SDL_Pointers.h
         src/UI/Text.h
+        src/UI/Image.h
         src/UI/UiContainer.h
         src/UI/UiElement.h
         src/UI/UiManager.h

@@ -1,6 +1,7 @@
 #include "UiContainer.h"
 #include "SDL2/SDL.h"
 #include "Core/App.h"
+#include "Input/Input.h"
 
 namespace Core::UI {
     void UiContainer::add(std::unique_ptr<UiElement> element, UiAnchorHorizontal anchorHorizontal, UiAnchorVertical anchorVertical){
@@ -34,5 +35,11 @@ namespace Core::UI {
         UiElement::render();
     }
 
-
+    bool UiContainer::onUserDrag(const SDL_Event& event){
+        if (m_IsDraggable){
+            setPosition(Input::getMousePosition());
+            return true;
+        }
+        return false;
+    }
 }

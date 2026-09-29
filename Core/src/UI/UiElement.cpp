@@ -48,4 +48,34 @@ namespace Core::UI {
     UiElement* UiElement::getChild(int index){
         return m_Children[index].get();
     }
+
+    bool UiElement::onEvent(const SDL_Event& event){
+
+        bool executedEvent {false};
+
+        switch (event.type){
+        case SDL_MOUSEBUTTONDOWN:
+            executedEvent |= onUserClick(event);
+            if ((m_GlobalPosition.getX() <= event.button.x && event.button.x <= m_GlobalPosition.getX() + m_Scale.getX()) 
+                && (m_GlobalPosition.getY() <= event.button.y && event.button.y <= m_GlobalPosition.getY() + m_Scale.getY()) 
+            ){
+                dragging = true;
+            }
+            break;
+        case SDL_MOUSEBUTTONUP:
+            dragging = false;
+            break;
+        case SDL_MOUSEMOTION:
+            if (dragging){
+                executedEvent |= onUserDrag(event);
+            }
+            break;
+        }
+
+        for (auto it = m_Children.begin(); it != m_Children.end(); it++){
+            executedEvent |= (*it)->onEvent(event);
+        }
+
+        return executedEvent;
+    }
 };

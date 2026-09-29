@@ -17,7 +17,7 @@
 
 namespace Variables {
     //Core::UI::Text text {"Hello world", 20, "assets/fonts/Roboto-Medium.ttf", SDL_Color {255, 0, 255, SDL_ALPHA_OPAQUE}};
-    std::unique_ptr<Core::UI::UiContainer> uiContainer {Core::UI::createContainer(true, 50)};
+    std::unique_ptr<Core::UI::UiElement> document {std::make_unique<Core::UI::UiElement>()};
     Core::ECS::Entity selectedEntity{};
 
     constexpr bool showColliders{false};
@@ -26,13 +26,13 @@ namespace Variables {
 
 void EditorLayer::onStart(){
 
-    Variables::uiContainer->setPosition({50, 50});
+    Variables::document->setScale(GET_APPLICATION().getWindow().getWindowSizeInt());
 
     std::println("Created UI tree!");
     std::filesystem::path uiConfigurations {"assets/ui/ui-editor.txt"};
     std::unique_ptr<Core::UI::UiElement> uiRoot {std::move(Core::UI::UiParser::createUiTree(uiConfigurations))};
     std::println("Created UI tree!");
-    Variables::uiContainer->add(std::move(uiRoot), Core::UI::UiAnchorHorizontal::left, Core::UI::UiAnchorVertical::top);
+    Variables::document->add(std::move(uiRoot), Core::UI::UiAnchorHorizontal::left, Core::UI::UiAnchorVertical::top);
 
 
     //Core::UI::attachUiElement<Core::UI::Text>(Variables::uiContainer.get(), Core::UI::UiAnchorPoint{},
@@ -118,7 +118,7 @@ bool EditorLayer::onEvent(const SDL_Event& event){
         //return true;
     }
 
-    return Variables::uiContainer->onEvent(event) || clicked;
+    return Variables::document->onEvent(event) || clicked;
 }
 
 void EditorLayer::onUpdate(double ts){
@@ -245,5 +245,5 @@ void EditorLayer::onRender(){
     //SDL_RenderFillRect(&GET_APPLICATION().getWindow().getRenderer(), &rect2);
 
 
-    Variables::uiContainer->render();
+    Variables::document->render();
 }

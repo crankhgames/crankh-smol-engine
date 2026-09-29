@@ -11,17 +11,20 @@ namespace Core::UI {
     class UiContainer : public UiElement {
     private:
         bool m_IsVertical {true};
+        bool m_IsDraggable {false};
         int m_GapSize {0};
 
     public:
-        UiContainer(bool isVertical=true, int gapSize=0):
-            m_IsVertical{isVertical}, m_GapSize{gapSize}
+        UiContainer(bool isVertical=true, int gapSize=0, bool isDraggable=false):
+            m_IsVertical{isVertical}, m_GapSize{gapSize}, m_IsDraggable{isDraggable}
         {};
 
         ~UiContainer() {};
 
         void add(std::unique_ptr<UiElement> element, UiAnchorHorizontal anchorHorizontal, UiAnchorVertical anchorVertical) override;
         void render() override;
+
+        bool onUserDrag(const SDL_Event& event) override;
 
     };
 }

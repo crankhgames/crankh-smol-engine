@@ -51,6 +51,12 @@ namespace Core::UI::UiParser {
             properties.insert({propertyName, propertyValue});
         }
 
+        std::string id {""};
+        if (properties.find("id") != properties.end()){
+            id = properties["id"];
+        }
+
+
         if (tagName == "text"){
             std::string font {"assets/fonts/Roboto-Medium.ttf"};
             std::string content {""};
@@ -83,7 +89,7 @@ namespace Core::UI::UiParser {
 
 
             //std::println("Returning text uiElement...");
-            return std::make_unique<Text>(content, pointSize, font.c_str(), color);
+            return std::make_unique<Text>(content, pointSize, font.c_str(), color, id);
         }
         else if (tagName == "button"){
             //std::println("Creating button...");
@@ -115,7 +121,7 @@ namespace Core::UI::UiParser {
             return std::make_unique<Button>(Math::Vec2Int{scaleX, scaleY}, backgroundColor, 
                 []{
                     std::println("Button pressed...");
-                }
+                }, id
             );
         }
         else if (tagName == "container"){
@@ -133,7 +139,7 @@ namespace Core::UI::UiParser {
                 isDraggable = properties["draggable"] == "true";
             }
 
-            return std::make_unique<UiContainer>(isVertical, gapSize, isDraggable);
+            return std::make_unique<UiContainer>(isVertical, gapSize, isDraggable, id);
         }
         else if (tagName == "image"){
             std::string textureFilename {"assets/sprites/horse-image.jpg"};
@@ -158,7 +164,7 @@ namespace Core::UI::UiParser {
                 return std::make_unique<Image>(Math::Vec2Int{scaleX.value_or(500), scaleY.value_or(500)}, textureFilename);
             }
             else{
-                return std::make_unique<Image>(scale, textureFilename);
+                return std::make_unique<Image>(scale, textureFilename, id);
             }
 
         }

@@ -31,47 +31,29 @@ void EditorLayer::onStart(){
     std::println("Created UI tree!");
     std::filesystem::path uiConfigurations {"assets/ui/ui-editor.txt"};
     std::unique_ptr<Core::UI::UiElement> uiRoot {std::move(Core::UI::UiParser::createUiTree(uiConfigurations))};
+    uiRoot->setBackground(true);
     std::println("Created UI tree!");
     Variables::document->add(std::move(uiRoot), Core::UI::UiAnchorHorizontal::left, Core::UI::UiAnchorVertical::top);
 
+    Core::UI::Button* button1 {dynamic_cast<Core::UI::Button*>(Variables::document->getElementById("btn1"))};
+    Core::UI::Button* button2 {dynamic_cast<Core::UI::Button*>(Variables::document->getElementById("btn2"))};
+    Core::UI::Button* button3 {dynamic_cast<Core::UI::Button*>(Variables::document->getElementById("btn3"))};
 
-    //Core::UI::attachUiElement<Core::UI::Text>(Variables::uiContainer.get(), Core::UI::UiAnchorPoint{},
-        //"Entity Info:",
-        //30,
-        //"assets/fonts/Roboto-Medium.ttf"
-    //);
-
-    //Core::UI::attachUiElement<Core::UI::Text>(Variables::uiContainer.get(), Core::UI::UiAnchorPoint{},
-        //"ID: NONE",
-        //15,
-        //"assets/fonts/Roboto-Medium.ttf"
-    //);
-
-    //Core::UI::attachUiElement<Core::UI::Text>(Variables::uiContainer.get(),Core::UI::UiAnchorPoint{},
-        //"Position: NONE",
-        //15,
-        //"assets/fonts/Roboto-Medium.ttf"
-    //);
-
-    //Core::UI::attachUiElement<Core::UI::Text>(Variables::uiContainer.get(),Core::UI::UiAnchorPoint{},
-        //"Scale: NONE",
-        //15,
-        //"assets/fonts/Roboto-Medium.ttf"
-    //);
-
-    //Core::UI::attachUiElement<Core::UI::Button>(Variables::uiContainer.get(),Core::UI::UiAnchorPoint{},
-        //Core::Math::Vec2Int {150, 40},
-        //SDL_Color {0xA0, 0xA0, 0xA0, SDL_ALPHA_OPAQUE},
-        //[]{
-            //std::println("Hello world!");
-        //}
-    //);
-
-    //Core::UI::attachUiElement<Core::UI::Text>(Variables::uiContainer->getChild(4),Core::UI::UiAnchorPoint{Core::UI::UiAnchorHorizontal::center, Core::UI::UiAnchorVertical::center},
-        //"Printing something...",
-        //15,
-        //"assets/fonts/Roboto-Medium.ttf"
-    //);
+    if (button1){
+        button1->setClickEvent([]{
+            std::println("Button 1 pressed...");
+        });
+    }
+    if (button2){
+        button2->setClickEvent([]{
+            std::println("Button 2 pressed...");
+        });
+    }
+    if (button3){
+        button3->setClickEvent([]{
+            std::println("Button 3 pressed...");
+        });
+    }
 
     std::println("Editor started...");
 }

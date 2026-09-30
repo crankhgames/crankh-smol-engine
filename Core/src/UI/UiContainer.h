@@ -11,12 +11,13 @@ namespace Core::UI {
     class UiContainer : public UiElement {
     private:
         bool m_IsVertical {true};
-        bool m_IsDraggable {false};
         int m_GapSize {0};
 
+        bool m_IsDraggable {false};
+
     public:
-        UiContainer(bool isVertical=true, int gapSize=0, bool isDraggable=false):
-            m_IsVertical{isVertical}, m_GapSize{gapSize}, m_IsDraggable{isDraggable}
+        UiContainer(bool isVertical=true, int gapSize=0, bool isDraggable=false, std::string id=""):
+            UiElement{id}, m_IsVertical{isVertical}, m_GapSize{gapSize}, m_IsDraggable{isDraggable}
         {};
 
         ~UiContainer() {};

@@ -11,13 +11,15 @@ namespace Core::UI {
         std::function<void()> m_ClickEvent{};
 
     public:
-        Button(const Math::Vec2Int& position, const Math::Vec2Int& scale, SDL_Color color, std::function<void()> clickEvent):
-            UiElement{position, scale}, m_Color{color}, m_ClickEvent {clickEvent}
+        Button(const Math::Vec2Int& position, const Math::Vec2Int& scale, SDL_Color color, std::function<void()> clickEvent, std::string id=""):
+            UiElement{position, scale, id}, m_Color{color}, m_ClickEvent {clickEvent}
         {};
 
-        Button(const Math::Vec2Int& scale, SDL_Color color, std::function<void()> clickEvent):
-            UiElement{{}, scale}, m_Color{color}, m_ClickEvent{clickEvent}
+        Button(const Math::Vec2Int& scale, SDL_Color color, std::function<void()> clickEvent, std::string id=""):
+            UiElement{{}, scale, id}, m_Color{color}, m_ClickEvent{clickEvent}
         {};
+
+        void setClickEvent(std::function<void()> clickEvent) {m_ClickEvent = clickEvent;}
 
         bool onUserClick(const SDL_Event& event) override;
 

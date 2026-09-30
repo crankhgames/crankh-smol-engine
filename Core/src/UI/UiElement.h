@@ -42,16 +42,19 @@ namespace Core::UI {
         Math::Vec2Int m_GlobalPosition {};
 
         std::vector<std::unique_ptr<UiElement>> m_Children {};
+        std::string m_Id{""};
 
         bool dragging{false};
+        bool background{false};
+        Math::Vec2Int dragPoint{};
 
     public:
-        UiElement():
-            m_Position{}, m_Scale{}
+        UiElement(std::string id=""):
+            m_Position{}, m_Scale{}, m_Id{id}
         {}
 
-        UiElement(Math::Vec2Int position, Math::Vec2Int scale):
-            m_Position{position}, m_Scale{scale}, m_GlobalPosition{position}
+        UiElement(Math::Vec2Int position, Math::Vec2Int scale, std::string id=""):
+            m_Position{position}, m_Scale{scale}, m_GlobalPosition{position}, m_Id{id}
         {}
 
         ~UiElement(){};
@@ -61,22 +64,27 @@ namespace Core::UI {
 
         Math::Vec2Int getPosition() const {return m_Position;}
         Math::Vec2Int getScale() const {return m_Scale;}
+        UiElement* getChild(int index);
+        std::string getId() {return m_Id;}
 
+        UiElement* getElementById(std::string_view id);
+
+        void setBackground(bool hasBackground) {background = hasBackground;}
         void setPosition(const Math::Vec2Int& position);
-
         void setScale(const Math::Vec2& scale){
             m_Scale = scale;
         }
 
         virtual bool onUserClick(const SDL_Event& event) { return false; }
-        virtual bool onUserDrag(const SDL_Event& event) { return false; }
+        virtual bool onUserDrag(const SDL_Event& event) {return false;}
 
         virtual bool onEvent(const SDL_Event& event);
 
 
         virtual void render();
 
-        UiElement* getChild(int index);
+
+        
 
     };
 

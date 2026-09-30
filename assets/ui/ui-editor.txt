@@ -1,20 +1,46 @@
 <container gap=20 draggable=true>
     <text content="Entity Info:" size=30> </text>
-    <text content="ID: " size=15> </text>
+    <text content="ID: " id=idtxt size=15> </text>
     <text content="Position: " size=15> </text>
     <text content="Scale: " size=15> </text>
     
     
-    <container gap=10 vertical=false draggable=false>
-        <button scaleX=150 scaleY=35 bgColor=FF00FFFF>
-            <text content="Button 1"> </text>
-        </button>
-        <button scaleX=150 scaleY=35 bgColor=00FFFFFF>
-            <text content="Button 2"> </text>
-        </button>
-        <button scaleX=150 scaleY=35 bgColor=FFFF00FF>
-            <text content="Button 3"> </text>
-        </button>
+    <container gap=10>
+        <container gap=10 vertical=false draggable=false>
+            <button scaleX=150 scaleY=35 bgColor=FF00FFFF id=btn1>
+                <text content="Button 1"> </text>
+            </button>
+            <button scaleX=150 scaleY=35 bgColor=00FFFFFF id=btn2>
+                <text content="Button 2"> </text>
+            </button>
+            <button scaleX=150 scaleY=35 bgColor=FFFF00FF id=btn3>
+                <text content="Button 3"> </text>
+            </button>
+        </container>
+        
+        <container gap=10 vertical=false draggable=false>
+            <button scaleX=150 scaleY=35 bgColor=FF00FFFF id=btn1>
+                <text content="Button 1"> </text>
+            </button>
+            <button scaleX=150 scaleY=35 bgColor=00FFFFFF id=btn2>
+                <text content="Button 2"> </text>
+            </button>
+            <button scaleX=150 scaleY=35 bgColor=FFFF00FF id=btn3>
+                <text content="Button 3"> </text>
+            </button>
+        </container>
+        
+        <container gap=10 vertical=false draggable=false>
+            <button scaleX=150 scaleY=35 bgColor=FF00FFFF id=btn1>
+                <text content="Button 1"> </text>
+            </button>
+            <button scaleX=150 scaleY=35 bgColor=00FFFFFF id=btn2>
+                <text content="Button 2"> </text>
+            </button>
+            <button scaleX=150 scaleY=35 bgColor=FFFF00FF id=btn3>
+                <text content="Button 3"> </text>
+            </button>
+        </container>
     </container>
 
     <image scale=.9 content="assets/sprites/tilemap/tileset.png"> </image>

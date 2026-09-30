@@ -1,4 +1,5 @@
 #include "UiElement.h"
+#include "Core/App.h"
 
 namespace Core::UI {
 
@@ -12,9 +13,20 @@ namespace Core::UI {
     }
 
     void UiElement::render() {
+        if (background){
+
+            SDL_SetRenderDrawColor(&GET_APPLICATION().getWindow().getRenderer(), 230, 230, 230, 100);
+            SDL_Rect rect {
+                m_GlobalPosition.getX(), m_GlobalPosition.getY(), m_Scale.getX(), m_Scale.getY()
+            };
+
+            SDL_RenderFillRect(&GET_APPLICATION().getWindow().getRenderer(), &rect);
+        }
+
         for (auto it = m_Children.begin(); it != m_Children.end(); it++){
             (*it)->render();
         }
+
     }
 
     void UiElement::add(std::unique_ptr<UiElement> uiElement, UiAnchorHorizontal anchorHorizontal, UiAnchorVertical anchorVertical){
@@ -49,6 +61,22 @@ namespace Core::UI {
         return m_Children[index].get();
     }
 
+    UiElement* UiElement::getElementById(std::string_view id){
+        if (m_Id == id){
+            return this;
+        }
+
+        for (auto& child : m_Children){
+            auto resultElement {child->getElementById(id)};
+
+            if (resultElement){
+                return resultElement;
+            }
+        }
+
+        return nullptr;
+    }
+
     bool UiElement::onEvent(const SDL_Event& event){
 
         bool executedEvent {false};
@@ -60,6 +88,7 @@ namespace Core::UI {
                 && (m_GlobalPosition.getY() <= event.button.y && event.button.y <= m_GlobalPosition.getY() + m_Scale.getY()) 
             ){
                 dragging = true;
+                dragPoint = Math::Vec2Int{event.button.x, event.button.y} - m_GlobalPosition;
             }
             break;
         case SDL_MOUSEBUTTONUP:

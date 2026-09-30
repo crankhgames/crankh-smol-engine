@@ -28,18 +28,19 @@ namespace Core::UI {
     }
 
     void UiContainer::render(){
-        SDL_SetRenderDrawColor(&GET_APPLICATION().getWindow().getRenderer(), 0xFF, 0x00, 0x00, 0xFF);
-        SDL_Rect boundingBox {m_GlobalPosition.getX(), m_GlobalPosition.getY(), m_Scale.getX(), m_Scale.getY()};
-        SDL_RenderDrawRect(&GET_APPLICATION().getWindow().getRenderer(), &boundingBox);
+        //SDL_SetRenderDrawColor(&GET_APPLICATION().getWindow().getRenderer(), 0xFF, 0x00, 0x00, 0xFF);
+        //SDL_Rect boundingBox {m_GlobalPosition.getX(), m_GlobalPosition.getY(), m_Scale.getX(), m_Scale.getY()};
+        //SDL_RenderDrawRect(&GET_APPLICATION().getWindow().getRenderer(), &boundingBox);
 
         UiElement::render();
     }
 
     bool UiContainer::onUserDrag(const SDL_Event& event){
         if (m_IsDraggable){
-            setPosition(Input::getMousePosition());
+            setPosition(static_cast<Math::Vec2Int>(Input::getMousePosition()) - dragPoint);
             return true;
         }
         return false;
     }
+
 }

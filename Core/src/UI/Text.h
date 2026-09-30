@@ -20,8 +20,8 @@ namespace Core::UI{
         TexturePtr m_FontTexture {};
 
     public:
-        Text(Math::Vec2Int position, Math::Vec2Int scale, std::string_view content, int ptSize, std::string_view filename, SDL_Color color) : 
-            UiElement{position, scale},  m_Font {TTF_OpenFont(filename.data(), ptSize)}, m_Color{color}, m_Content{content}
+        Text(Math::Vec2Int position, Math::Vec2Int scale, std::string_view content, int ptSize, std::string_view filename, SDL_Color color, std::string id="") : 
+            UiElement{position, scale, id},  m_Font {TTF_OpenFont(filename.data(), ptSize)}, m_Color{color}, m_Content{content}
         {
             SurfacePtr textSurface {
                 TTF_RenderText_Solid(m_Font.get(), m_Content.c_str(), m_Color)
@@ -29,8 +29,8 @@ namespace Core::UI{
             m_FontTexture.reset({SDL_CreateTextureFromSurface(&GET_APPLICATION().getWindow().getRenderer(), textSurface.get())});
         };
 
-        Text(std::string_view content, int ptSize, std::string_view filename, SDL_Color color):
-            Text{Math::Vec2Int{}, Math::Vec2Int{}, content, ptSize, filename, color}
+        Text(std::string_view content, int ptSize, std::string_view filename, SDL_Color color, std::string id=""):
+            Text{Math::Vec2Int{}, Math::Vec2Int{}, content, ptSize, filename, color, id}
         {
             int textureWidth {};
             int textureHeight {};

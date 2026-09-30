@@ -10,16 +10,16 @@ namespace Core::UI {
         TexturePtr m_ImageTexture{};
 
     public:
-        Image(const Math::Vec2& position, const Math::Vec2& scale, std::string_view filename):
-            UiElement{position, scale}, m_ImageTexture{Renderer::loadTexture(filename.data())}
+        Image(const Math::Vec2& position, const Math::Vec2& scale, std::string_view filename, std::string id=""):
+            UiElement{position, scale, id}, m_ImageTexture{Renderer::loadTexture(filename.data())}
         {};
 
-        Image(const Math::Vec2& scale, std::string_view filename):
-            UiElement{{}, scale}, m_ImageTexture{Renderer::loadTexture(filename.data())}
+        Image(const Math::Vec2& scale, std::string_view filename, std::string id=""):
+            UiElement{{}, scale, id}, m_ImageTexture{Renderer::loadTexture(filename.data())}
         {};
 
-        Image(double scaleFactor, std::string_view filename):
-            m_ImageTexture{Renderer::loadTexture(filename.data())}
+        Image(double scaleFactor, std::string_view filename, std::string id=""):
+            UiElement{{}, {}, id}, m_ImageTexture{Renderer::loadTexture(filename.data())}
         {
             int width{};
             int height{};

@@ -1,3 +1,4 @@
+tileset="assets/tilemaps/platform-tilemap.txt"
 size=(16, 16)
 tiles={
     ((240, 224), (0, 0)),

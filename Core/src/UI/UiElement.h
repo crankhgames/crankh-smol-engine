@@ -2,6 +2,7 @@
 
 #include "Math/Math.h"
 #include "SDL2/SDL.h"
+#include "SDL_Pointers.h"
 
 #include <vector>
 #include <memory>
@@ -21,18 +22,24 @@ namespace Core::UI {
         bottom
     };
 
-    //struct UiStylingOptions {
-        //SDL_Color color{0, 0, 0, 255};
-        //SDL_Color backgroundColor{0, 0, 0, 0};
+    struct UiStylingOptions {
+        SDL_Color color{0, 0, 0, 255};
+        SDL_Color backgroundColor{0, 0, 0, 0};
 
-        //double marginLeft {};
-        //double marginRight {};
-        //double marginTop {};
-        //double marginBottom {};
+        double marginLeft {};
+        double marginRight {};
+        double marginTop {};
+        double marginBottom {};
 
-        //TexturePtr imageTexture {};
-        //FontPtr font {};
-    //};
+        bool isDraggable {false};
+        bool isVertical {false};
+
+        Math::Vec2Int position{};
+        Math::Vec2Int scale{};
+
+        TexturePtr imageTexture {};
+        FontPtr font {};
+    };
     
     class UiElement {
     protected:

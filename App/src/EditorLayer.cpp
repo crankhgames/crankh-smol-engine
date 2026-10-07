@@ -7,6 +7,7 @@
 #include "UI/UiContainer.h"
 #include "UI/UiManager.h"
 #include "UI/Button.h"
+#include "UI/Image.h"
 #include "UI/UiParser.h"
 
 #include <print>
@@ -20,7 +21,10 @@ namespace Variables {
     std::unique_ptr<Core::UI::UiElement> document {std::make_unique<Core::UI::UiElement>()};
     Core::ECS::Entity selectedEntity{};
 
-    constexpr bool showColliders{false};
+    constexpr bool showColliders{true};
+
+
+    bool isDraggingEntity {false};
 };
 
 
@@ -28,30 +32,18 @@ void EditorLayer::onStart(){
 
     Variables::document->setScale(GET_APPLICATION().getWindow().getWindowSizeInt());
 
-    std::println("Created UI tree!");
     std::filesystem::path uiConfigurations {"assets/ui/ui-editor.txt"};
     std::unique_ptr<Core::UI::UiElement> uiRoot {std::move(Core::UI::UiParser::createUiTree(uiConfigurations))};
     uiRoot->setBackground(true);
-    std::println("Created UI tree!");
+
     Variables::document->add(std::move(uiRoot), Core::UI::UiAnchorHorizontal::left, Core::UI::UiAnchorVertical::top);
 
-    Core::UI::Button* button1 {dynamic_cast<Core::UI::Button*>(Variables::document->getElementById("btn1"))};
-    Core::UI::Button* button2 {dynamic_cast<Core::UI::Button*>(Variables::document->getElementById("btn2"))};
-    Core::UI::Button* button3 {dynamic_cast<Core::UI::Button*>(Variables::document->getElementById("btn3"))};
+    Core::UI::Button* button1 {dynamic_cast<Core::UI::Button*>(Variables::document->getElementById("loadtilesetbtn"))};
+    Core::UI::Image* image {dynamic_cast<Core::UI::Image*>(Variables::document->getElementById("tilesetimg"))};
 
     if (button1){
-        button1->setClickEvent([]{
-            std::println("Button 1 pressed...");
-        });
-    }
-    if (button2){
-        button2->setClickEvent([]{
-            std::println("Button 2 pressed...");
-        });
-    }
-    if (button3){
-        button3->setClickEvent([]{
-            std::println("Button 3 pressed...");
+        button1->setClickEvent([image]{
+            image->changeTexture("assets/sprites/horse-image.jpg", .5);
         });
     }
 
@@ -60,13 +52,14 @@ void EditorLayer::onStart(){
 
 bool EditorLayer::onEvent(const SDL_Event& event){
     bool clicked {false};
+
+    using namespace Core::ECS::Components;
     switch (event.type){
     case SDL_MOUSEBUTTONDOWN:
+    {
         Core::ECS::Scene& scene {GET_APPLICATION().getLayer<GameLayer>()->getScene()};
-        using namespace Core::ECS::Components;
-        auto entities {scene.getAllEntitiesWith<TransformComponent>()};
-
         Core::Math::Vec2 worldMousePosition {Core::Camera::screenToWorld(scene.getMainCameraEntity(), Core::Input::getMousePosition())};
+        auto entities {scene.getAllEntitiesWith<TransformComponent>()};
 
 
         for (Core::ECS::Entity entity : entities){
@@ -77,6 +70,7 @@ bool EditorLayer::onEvent(const SDL_Event& event){
                 Core::Math::Vec2 bottomRight {topLeft + actorCollider.m_Bounds};
                 if (topLeft.getX() <= worldMousePosition.getX() && worldMousePosition.getX() <= bottomRight.getX() && topLeft.getY() <= worldMousePosition.getY() && worldMousePosition.getY() <= bottomRight.getY()){
                     Variables::selectedEntity = entity;
+                    Variables::isDraggingEntity = true;
                     break;
                 }
             }
@@ -86,6 +80,7 @@ bool EditorLayer::onEvent(const SDL_Event& event){
                 Core::Math::Vec2 bottomRight {topLeft + solidCollider.m_Bounds};
                 if (topLeft.getX() <= worldMousePosition.getX() && worldMousePosition.getX() <= bottomRight.getX() && topLeft.getY() <= worldMousePosition.getY() && worldMousePosition.getY() <= bottomRight.getY()){
                     Variables::selectedEntity = entity;
+                    Variables::isDraggingEntity = true;
                     break;
                 }
 
@@ -96,8 +91,23 @@ bool EditorLayer::onEvent(const SDL_Event& event){
 
         clicked = true;
         break;
-    //case SDL_KEYDOWN:
-        //return true;
+    }
+    case SDL_MOUSEBUTTONUP:
+        Variables::isDraggingEntity = false;
+        break;
+
+    case SDL_MOUSEMOTION:
+        if (Variables::isDraggingEntity && Variables::selectedEntity.getId() != -1){
+            TransformComponent& transform {Variables::selectedEntity.getComponent<TransformComponent>()};
+
+            Core::Math::Vec2 mousePosition {Core::Input::getMousePosition()};
+            transform.m_Position = Core::Camera::screenToWorld(GET_APPLICATION().getLayer<GameLayer>()->getScene().getMainCameraEntity(), mousePosition);
+
+            return true;
+        }
+
+        break;
+
     }
 
     return Variables::document->onEvent(event) || clicked;
@@ -107,13 +117,15 @@ void EditorLayer::onUpdate(double ts){
 
     using Core::ECS::Components::TransformComponent;
 
-    //if (Variables::selectedEntity.getId() != -1){
+    if (Variables::selectedEntity.getId() != -1){
 
-        //dynamic_cast<Core::UI::Text*>(Variables::uiContainer->getChild(1))->setContent(std::format("ID: {}", Variables::selectedEntity.getId()));
-        //TransformComponent& minEntTransform {Variables::selectedEntity.getComponent<TransformComponent>()};
-        //dynamic_cast<Core::UI::Text*>(Variables::uiContainer->getChild(2))->setContent(std::format("Position: {:.3f}, {:.3f}", minEntTransform.m_Position.getX(), minEntTransform.m_Position.getY()));
-        //dynamic_cast<Core::UI::Text*>(Variables::uiContainer->getChild(3))->setContent(std::format("Scale: {:.3f}, {:.3f}", minEntTransform.m_Scale.getX(), minEntTransform.m_Scale.getY()));
-    //}
+        dynamic_cast<Core::UI::Text*>(Variables::document->getElementById("id"))->setContent(std::format("ID: {}", Variables::selectedEntity.getId()));
+        TransformComponent& minEntTransform {Variables::selectedEntity.getComponent<TransformComponent>()};
+        dynamic_cast<Core::UI::Text*>(Variables::document->getElementById("pos"))->setContent(std::format("Position: {:.3f}, {:.3f}", minEntTransform.m_Position.getX(), minEntTransform.m_Position.getY()));
+        dynamic_cast<Core::UI::Text*>(Variables::document->getElementById("scale"))->setContent(std::format("Scale: {:.3f}, {:.3f}", minEntTransform.m_Scale.getX(), minEntTransform.m_Scale.getY()));
+
+
+    }
 
 }
 
@@ -182,9 +194,12 @@ void EditorLayer::onRender(){
 
     SDL_SetRenderDrawColor(&GET_APPLICATION().getWindow().getRenderer(), 0xFF, 0x00, 0x00, SDL_ALPHA_OPAQUE);
     if (Variables::selectedEntity.getId() != -1){
+        
+
         if (Variables::selectedEntity.hasComponent<ActorColliderComponent>() || Variables::selectedEntity.hasComponent<SolidColliderComponent>()){
 
             TransformComponent& selectedTransform {Variables::selectedEntity.getComponent<TransformComponent>()};
+
 
             if (Variables::selectedEntity.hasComponent<ActorColliderComponent>()){
                 ActorColliderComponent& selectedActorCollider {Variables::selectedEntity.getComponent<ActorColliderComponent>()};
@@ -214,18 +229,17 @@ void EditorLayer::onRender(){
                 SDL_RenderDrawRect(&GET_APPLICATION().getWindow().getRenderer(), &rect);
             }
 
+            Core::Math::Vec2 screenEntityPosition {Core::Camera::worldToScreen(mainCameraEntity, selectedTransform.m_Position)};
+            SDL_Rect downArrow {screenEntityPosition.getX()-2, screenEntityPosition.getY(), 4, 80};
+            SDL_Rect rightArrow {screenEntityPosition.getX(), screenEntityPosition.getY()-2, 80, 4};
+
+            SDL_SetRenderDrawColor(&GET_APPLICATION().getWindow().getRenderer(), 0x00, 0xFF, 0x00, SDL_ALPHA_OPAQUE);
+            SDL_RenderFillRect(&GET_APPLICATION().getWindow().getRenderer(), &downArrow);
+            SDL_SetRenderDrawColor(&GET_APPLICATION().getWindow().getRenderer(), 0xFF, 0x00, 0x00, SDL_ALPHA_OPAQUE);
+            SDL_RenderFillRect(&GET_APPLICATION().getWindow().getRenderer(), &rightArrow);
         }
 
     }
-    //SDL_Rect rect2 {
-        //700, 300, 200, 200
-    //};
-
-
-    //SDL_RenderFillRect(&GET_APPLICATION().getWindow().getRenderer(), &rect);
-    //SDL_SetRenderDrawColor(&GET_APPLICATION().getWindow().getRenderer(), 0x50, 0x50, 0x50, 50);
-    //SDL_RenderFillRect(&GET_APPLICATION().getWindow().getRenderer(), &rect2);
-
 
     Variables::document->render();
 }

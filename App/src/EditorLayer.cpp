@@ -10,6 +10,8 @@
 #include "UI/Image.h"
 #include "UI/UiParser.h"
 
+#include "Renderer/Tilemap-Parser.h"
+
 #include <print>
 #include <functional>
 #include <format>
@@ -31,6 +33,7 @@ namespace Variables {
 void EditorLayer::onStart(){
 
     Variables::document->setScale(GET_APPLICATION().getWindow().getWindowSizeInt());
+
 
     std::filesystem::path uiConfigurations {"assets/ui/ui-editor.txt"};
     std::unique_ptr<Core::UI::UiElement> uiRoot {std::move(Core::UI::UiParser::createUiTree(uiConfigurations))};

@@ -23,7 +23,14 @@
                 <text content="Save scene..."> </text>
             </button>
         </container>
+
         
+    </container>
+    
+    <container gap=5>
+        <button scaleX=150 scaleY=35 id=paintbtn>
+            <text content="Paint..."> </text>            
+        </button>
     </container>
 
     <image scale=1.3 content="assets/sprites/tilemap/tileset.png" id=tilesetimg> </image>

@@ -11,6 +11,7 @@ file(COPY assets/
 find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)
 find_package(SDL2_ttf REQUIRED)
+find_package(nlohmann_json 3.12.0 REQUIRED)
 
 add_subdirectory(App)
 add_subdirectory(Core)
@@ -27,4 +28,5 @@ target_link_libraries(App
         ${SDL2_LIBRARIES}
         SDL2_image
         SDL2_ttf
+        nlohmann_json::nlohmann_json
 )

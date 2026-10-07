@@ -19,6 +19,7 @@ PRIVATE
     src/UI/Button.cpp
     src/Camera/Camera.cpp
     src/UI/UiParser.cpp
+    src/Renderer/Tilemap-Parser.cpp
 
 PUBLIC
     FILE_SET HEADERS
@@ -45,6 +46,7 @@ PUBLIC
         src/UI/Button.h
         src/Camera/Camera.h
         src/UI/UiParser.h
+        src/Renderer/Tilemap-Parser.h
 )
 
 target_include_directories(Core

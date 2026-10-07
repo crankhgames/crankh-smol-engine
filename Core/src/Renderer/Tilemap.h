@@ -7,7 +7,4 @@ namespace Core::Renderer{
         Math::Vec2Int srcTileSize {};
         Math::Vec2Int gridPosition {};
     };
-
-
-
 }

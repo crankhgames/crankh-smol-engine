@@ -35,4 +35,6 @@
 
     <image scale=1.3 content="assets/sprites/tilemap/tileset.png" id=tilesetimg> </image>
 
+    <input scaleX=150 scaleY=35> </input>
+
 </container>

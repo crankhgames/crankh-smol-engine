@@ -99,6 +99,12 @@ namespace Core::UI {
                 executedEvent |= onUserDrag(event);
             }
             break;
+        case SDL_KEYDOWN:
+            executedEvent |= onUserKeyboardPress(event);
+            break;
+        case SDL_TEXTINPUT:
+            executedEvent |= onUserInputText(event);
+            break;
         }
 
         for (auto it = m_Children.begin(); it != m_Children.end(); it++){

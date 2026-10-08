@@ -1,6 +1,7 @@
 #include "UiParser.h"
 
 #include "Text.h"
+#include "InputField.h"
 #include "Button.h"
 #include "Image.h"
 #include "UiContainer.h"
@@ -167,6 +168,43 @@ namespace Core::UI::UiParser {
                 return std::make_unique<Image>(scale, textureFilename, id);
             }
 
+        }
+        else if (tagName == "input"){
+            std::string font {"assets/fonts/Roboto-Medium.ttf"};
+            int pointSize {15};
+            int scaleX {100};
+            int scaleY {75};
+            SDL_Color color {0, 0, 0, 255};
+
+            if (properties.find("font") != properties.end()){
+                font = properties["font"].substr(1, properties["font"].size()-2);
+            }
+            if (properties.find("size") != properties.end()){
+                pointSize = std::stoi(properties["size"]);
+            }
+            if (properties.find("scaleX") != properties.end()){
+                scaleX = std::stoi(properties["scaleX"]);
+            }
+            if (properties.find("scaleY") != properties.end()){
+                scaleY = std::stoi(properties["scaleY"]);
+            }
+            if (properties.find("color") != properties.end()){
+
+                std::string_view red {properties["color"].subview(0, 2)};
+                std::string_view green {properties["color"].subview(3, 2)};
+                std::string_view blue {properties["color"].subview(5, 2)};
+                std::string_view alpha {properties["color"].subview(7, 2)};
+
+                color = SDL_Color{
+                    static_cast<Uint8>(std::stoi(std::string{red}, 0, 16)),
+                    static_cast<Uint8>(std::stoi(std::string{green}, 0, 16)),
+                    static_cast<Uint8>(std::stoi(std::string{blue}, 0, 16)),
+                    static_cast<Uint8>(std::stoi(std::string{alpha}, 0, 16)),
+                };
+            }
+            std::println("Created input...");
+
+            return std::make_unique<InputField>(Math::Vec2Int{}, Math::Vec2Int{scaleX, scaleY}, "Placeholder...", pointSize, font, color, id);
         }
 
         return std::make_unique<UiElement>();

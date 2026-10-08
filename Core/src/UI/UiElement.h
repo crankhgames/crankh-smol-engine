@@ -84,6 +84,8 @@ namespace Core::UI {
 
         virtual bool onUserClick(const SDL_Event& event) { return false; }
         virtual bool onUserDrag(const SDL_Event& event) {return false;}
+        virtual bool onUserKeyboardPress(const SDL_Event& event) {return false;}
+        virtual bool onUserInputText(const SDL_Event& event) {return false;}
 
         virtual bool onEvent(const SDL_Event& event);
 

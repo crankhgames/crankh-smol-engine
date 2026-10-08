@@ -17,6 +17,7 @@ PRIVATE
     src/UI/UiContainer.cpp
     src/UI/UiManager.cpp
     src/UI/Button.cpp
+    src/UI/InputField.cpp
     src/Camera/Camera.cpp
     src/UI/UiParser.cpp
     src/Renderer/Tilemap-Parser.cpp
@@ -44,6 +45,7 @@ PUBLIC
         src/UI/UiElement.h
         src/UI/UiManager.h
         src/UI/Button.h
+        src/UI/InputField.h
         src/Camera/Camera.h
         src/UI/UiParser.h
         src/Renderer/Tilemap-Parser.h
